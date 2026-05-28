@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Avellana Dashboard | Ventas Último Trimestre</title>
+    <!-- Usamos Chart.js CDN para gráficos profesionales (sin instalar nada, solo CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <!-- Font Awesome para iconos interactivos opcionales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f7f5e8 0%, #f0ede0 100%);
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* Estilo principal tipo "avellana" cálido */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
+            border-bottom: 3px solid #c97e3a;
+            padding-bottom: 0.75rem;
+        }
+
+        .title-section h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #5a3e2b, #a5692c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        .title-section p {
+            color: #6b4c3b;
+            font-weight: 500;
+            margin-top: 0.3rem;
+        }
+        .badge-quarter {
+            background: #d9c5a7;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: #4a2e1f;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* Panel de controles (activar/desactivar elementos) */
+        .controls-panel {
+            background: #fffef7;
+            border-radius: 28px;
+            padding: 1rem 1.8rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid #e7dbbc;
+        }
+        .toggle-group {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f5f2e6;
+            padding: 6px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            font-weight: 500;
+            color: #4a3927;
+        }
+        .toggle-item i {
+            font-size: 1.1rem;
+        }
+        .toggle-item.active {
+            background: #c97e3a;
+            color: white;
+            box-shadow: 0 4px 8px rgba(201,126,58,0.3);
+        }
+        .toggle-item input {
+            display: none;
+        }
+        .reset-btn {
+            background: #e3d6c0;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 32px;
+            font-weight: 600;
+            color: #5a3e2b;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-left: auto;
+        }
+        .reset-btn:hover {
+            background: #c97e3a;
+            color: white;
+        }
+
+        /* Grilla de tarjetas dinámicas */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: rgba(255, 253, 245, 0.95);
+            backdrop-filter: blur(0px);
+            border-radius: 32px;
+            padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            transition: all 0.2s ease;
+            border: 1px solid #f0e5d2;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .card.hidden-card {
+            display: none;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-left: 5px solid #c97e3a;
+            padding-left: 1rem;
+        }
+        .card-header h3 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #3e2a1c;
+        }
+        .card-header i {
+            color: #c97e3a;
+            font-size: 1.4rem;
+        }
+        canvas {
+            max-height: 260px;
+            width: 100%;
+        }
+        .kpi-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .kpi-badge {
+            background: #f3efdf;
+            border-radius: 28px;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            flex: 1;
+        }
+        .kpi-badge span:first-child {
+            font-weight: 600;
+            color: #b35f1a;
+        }
+        .kpi-number {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #2e241d;
+        }
+
+        .footnote {
+            text-align: center;
+            margin-top: 2rem;
+            color: #957859;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 800px) {
+            body { padding: 1rem; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .controls-panel { flex-direction: column; align-items: stretch; }
+            .reset-btn { margin-left: 0; margin-top: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="header">
+        <div class="title-section">
+            <h1><i class="fas fa-seedling" style="color:#c97e3a;"></i> Avellana · Q4 Insights</h1>
+            <p>Dashboard de ventas interactivo · Último trimestre (Oct - Nov - Dic 2025)</p>
+        </div>
+        <div class="badge-quarter">
+            <i class="fas fa-chart-line"></i> Ventas totales: <span id="totalVentasSpan">$0K</span>
+        </div>
+    </div>
+
+    <!-- Panel de activación/desactivación -->
+    <div class="controls-panel">
+        <div class="toggle-group">
+            <div class="toggle-item active" data-target="ventasMensuales">
+                <i class="fas fa-chart-bar"></i> <span>Ventas mensuales</span>
+                <input type="checkbox" checked hidden>
+            </div>
+            <div class="toggle-item active" data-target="topProductos">
+                <i class="fas fa-crown"></i> <span>Top productos</span>
+                <input type="checkbox" checked hidden>
+            </div>
+            <div class="toggle-item active" data-target="evolucionSemanal">
+                <i class="fas fa-chart-line"></i> <span>Evolución semanal</span>
+                <input type="checkbox" checked hidden>
+            </div>
+            <div class="toggle-item active" data-target="canalesVenta">
+                <i class="fas fa-store"></i> <span>Canales de venta</span>
+                <input type="checkbox" checked hidden>
+            </div>
+        </div>
+        <button class="reset-btn" id="actualizarDatosBtn"><i class="fas fa-database"></i> Actualizar datos</button>
+        <button class="reset-btn" id="resetTogglesBtn"><i class="fas fa-sync-alt"></i> Mostrar todos</button>
+    </div>
+
+    <!-- Grid de gráficos / elementos interactivos -->
+    <div class="dashboard-grid" id="dashboardGrid">
+        <!-- Tarjeta 1: Ventas Mensuales (Gráfico barras) -->
+        <div class="card" data-card-id="ventasMensuales">
+            <div class="card-header">
+                <h3><i class="fas fa-calendar-alt"></i> Ventas mensuales (trimestre)</h3>
+                <i class="fas fa-chart-simple"></i>
+            </div>
+            <canvas id="barChartMensual" width="400" height="240" style="max-width:100%; height:auto;"></canvas>
+            <div class="kpi-row">
+                <div class="kpi-badge"><span>Octubre</span><br><span class="kpi-number" id="octKpi">$0K</span></div>
+                <div class="kpi-badge"><span>Noviembre</span><br><span class="kpi-number" id="novKpi">$0K</span></div>
+                <div class="kpi-badge"><span>Diciembre</span><br><span class="kpi-number" id="dicKpi">$0K</span></div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 2: Top productos (Gráfico doughnut / pastel) -->
+        <div class="card" data-card-id="topProductos">
+            <div class="card-header">
+                <h3><i class="fas fa-seedling"></i> Top 5 productos más vendidos</h3>
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <canvas id="doughnutProductos" width="400" height="220" style="max-width:100%; height:auto;"></canvas>
+            <div class="kpi-row" style="justify-content: center; gap:0.6rem;" id="productosLegends"></div>
+        </div>
+
+        <!-- Tarjeta 3: Evolución semanal (Línea interactiva) -->
+        <div class="card" data-card-id="evolucionSemanal">
+            <div class="card-header">
+                <h3><i class="fas fa-waveform"></i> Evolución semanal (ventas)</h3>
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <canvas id="lineaSemanal" width="400" height="230" style="max-width:100%; height:auto;"></canvas>
+            <div class="kpi-row">
+                <div class="kpi-badge"><span>Semana pico</span><br><span class="kpi-number" id="semanaPico">Sem 50</span></div>
+                <div class="kpi-badge"><span>Crecimiento Δ</span><br><span class="kpi-number" id="crecimientoLinea">+18%</span></div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 4: Canales de venta (Gráfico de barras horizontales / pastel pero usaremos dona dual? usaremos barra simple tipo ranking) -->
+        <div class="card" data-card-id="canalesVenta">
+            <div class="card-header">
+                <h3><i class="fas fa-channels"></i> Canales de venta (ingresos)</h3>
+                <i class="fas fa-chart-column"></i>
+            </div>
+            <canvas id="barCanales" width="400" height="220" style="max-width:100%; height:auto;"></canvas>
+            <div class="kpi-row">
+                <div class="kpi-badge"><span>Canal estrella</span><br><span class="kpi-number" id="topCanal">Online</span></div>
+                <div class="kpi-badge"><span>% participación</span><br><span class="kpi-number" id="porcentajeTop">42%</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="footnote">
+        <i class="fas fa-hand-pointer"></i> Haz clic en los botones del panel superior para ocultar/mostrar cada gráfico. Datos simulados para Avellana®.
+    </div>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // DATOS FICTICIOS DEL ÚLTIMO TRIMESTRE (Avellana)
+    // --------------------------------------------------------------
+    // Ventas mensuales en miles de €
+    const ventasMensuales = {
+        octubre: 124,   // 124k €
+        noviembre: 158,
+        diciembre: 205
+    };
+    // Top 5 productos: nombre y unidades/ingresos (en miles)
+    const productos = [
+        { nombre: "Avellana Tostada Premium", valor: 89 },
+        { nombre: "Crema de Avellana", valor: 72 },
+        { nombre: "Avellana Cubierta Chocolate", valor: 54 },
+        { nombre: "Aceite de Avellana", valor: 38 },
+        { nombre: "Harina de Avellana", valor: 27 }
+    ];
+    // Evolución semanal: 13 semanas del trimestre (octubre semana 40 a diciembre semana 52 aprox)
+    const semanasLabels = ["Sem 40", "Sem 41", "Sem 42", "Sem 43", "Sem 44", "Sem 45", "Sem 46", "Sem 47", "Sem 48", "Sem 49", "Sem 50", "Sem 51", "Sem 52"];
+    const ventasSemanales = [28, 31, 29, 34, 38, 42, 46, 52, 58, 67, 79, 85, 92];
+    // Canales de venta
+    const canales = {
+        "Online (Web)": 186,
+        "Tiendas propias": 142,
+        "Marketplaces": 98,
+        "Distribuidores": 61,
+        "Pop-up stores": 33
+    };
+
+    // Totales acumulados
+    const totalTrimestre = ventasMensuales.octubre + ventasMensuales.noviembre + ventasMensuales.diciembre;
+    document.getElementById('totalVentasSpan').innerText = `$${totalTrimestre}K`;
+    document.getElementById('octKpi').innerText = `$${ventasMensuales.octubre}K`;
+    document.getElementById('novKpi').innerText = `$${ventasMensuales.noviembre}K`;
+    document.getElementById('dicKpi').innerText = `$${ventasMensuales.diciembre}K`;
+    
+    // Semana pico y crecimiento
+    const maxSemana = Math.max(...ventasSemanales);
+    const maxIndex = ventasSemanales.indexOf(maxSemana);
+    document.getElementById('semanaPico').innerText = semanasLabels[maxIndex];
+    const crecimiento = ((ventasSemanales[ventasSemanales.length-1] - ventasSemanales[0]) / ventasSemanales[0] * 100).toFixed(0);
+    document.getElementById('crecimientoLinea').innerHTML = `+${crecimiento}%`;
+    
+    // Top canal y porcentaje
+    let maxCanal = "";
+    let maxValor = 0;
+    for (const [canal, valor] of Object.entries(canales)) {
+        if (valor > maxValor) { maxValor = valor; maxCanal = canal; }
+    }
+    const totalCanales = Object.values(canales).reduce((a,b)=>a+b,0);
+    const porcentajeTop = ((maxValor/totalCanales)*100).toFixed(0);
+    document.getElementById('topCanal').innerText = maxCanal;
+    document.getElementById('porcentajeTop').innerText = `${porcentajeTop}%`;
+
+    // ---------- Inicializar gráficos con Chart.js ----------
+    // 1. Gráfico Barras - Ventas Mensuales
+    const ctxBar = document.getElementById('barChartMensual').getContext('2d');
+    let barChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['Octubre', 'Noviembre', 'Diciembre'],
+            datasets: [{
+                label: 'Ingresos (miles €)',
+                data: [ventasMensuales.octubre, ventasMensuales.noviembre, ventasMensuales.diciembre],
+                backgroundColor: ['#e6b17e', '#cc8b54', '#b36b33'],
+                borderRadius: 12,
+                borderSkipped: false,
+                barPercentage: 0.65,
+                categoryPercentage: 0.8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'top', labels: { font: { weight: 'bold' } } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.raw}K €` } }
+            }
+        }
+    });
+
+    // 2. Gráfico Doughnut (Top productos)
+    const ctxDoughnut = document.getElementById('doughnutProductos').getContext('2d');
+    let doughnutChart = new Chart(ctxDoughnut, {
+        type: 'doughnut',
+        data: {
+            labels: productos.map(p => p.nombre),
+            datasets: [{
+                data: productos.map(p => p.valor),
+                backgroundColor: ['#c97e3a', '#e09d5e', '#f0bc7a', '#d6a16a', '#b87a42'],
+                borderWidth: 0,
+                cutout: '55%',
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { size: 10 } } },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw}K €` } }
+            }
+        }
+    });
+    // Leyenda extra para top productos (KPI)
+    const prodLegendDiv = document.getElementById('productosLegends');
+    productos.slice(0,3).forEach(p => {
+        let span = document.createElement('div');
+        span.className = 'kpi-badge';
+        span.style.padding = '0.3rem 0.7rem';
+        span.innerHTML = `<span>${p.nombre.substring(0,12)}</span><br><span class="kpi-number">${p.valor}K€</span>`;
+        prodLegendDiv.appendChild(span);
+    });
+
+    // 3. Gráfico Línea Evolución Semanal
+    const ctxLine = document.getElementById('lineaSemanal').getContext('2d');
+    let lineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: {
+            labels: semanasLabels,
+            datasets: [{
+                label: 'Ventas semanales (miles €)',
+                data: ventasSemanales,
+                borderColor: '#c97e3a',
+                backgroundColor: 'rgba(201,126,58,0.05)',
+                borderWidth: 3,
+                pointBackgroundColor: '#a35c2b',
+                pointBorderColor: '#fff',
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                tension: 0.2,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: { callbacks: { label: (ctx) => `${ctx.raw}K €` } },
+            },
+            scales: { y: { beginAtZero: true, grid: { color: '#edd8bc' }, title: { display: true, text: 'Miles €' } } }
+        }
+    });
+
+    // 4. Gráfico Barras Canales (Horizontal o vertical, usaremos vertical con barras horizontales? Mejor vertical simple)
+    const ctxCanales = document.getElementById('barCanales').getContext('2d');
+    let barCanalesChart = new Chart(ctxCanales, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(canales),
+            datasets: [{
+                label: 'Ingresos por canal (miles €)',
+                data: Object.values(canales),
+                backgroundColor: '#b9793f',
+                borderRadius: 10,
+                barPercentage: 0.7
+            }]
+        },
+        options: {
+            indexAxis: 'y',  // gráfico horizontal más legible
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.raw}K €` } }
+            },
+            scales: { x: { title: { display: true, text: 'Miles €' } } }
+        }
+    });
+
+    // --------------------------------------------------------------
+    // INTERACTIVIDAD: Activar / Desactivar elementos (toggles)
+    // --------------------------------------------------------------
+    // Función para mostrar/ocultar tarjetas según data-card-id
+    const toggleItems = document.querySelectorAll('.toggle-item');
+    const cards = document.querySelectorAll('.card');
+    const resetBtn = document.getElementById('resetTogglesBtn');
+
+    // Estado inicial: todos visibles (porque tienen .active y checked)
+    function updateDashboardVisibility() {
+        // Recorremos cada toggle: si tiene clase 'active' -> mostrar tarjeta asociada, si no -> ocultar
+        toggleItems.forEach(toggle => {
+            const targetId = toggle.getAttribute('data-target');
+            const isActive = toggle.classList.contains('active');
+            const targetCard = document.querySelector(`.card[data-card-id="${targetId}"]`);
+            if (targetCard) {
+                if (isActive) {
+                    targetCard.classList.remove('hidden-card');
+                } else {
+                    targetCard.classList.add('hidden-card');
+                }
+            }
+        });
+        // pequeña mejora: reflujo opcional para redibujar gráficos (no necesario)
+        // Forzamos resize de gráficos para que canvas se ajuste bien si cambia contenedor
+        try {
+            barChart.resize();
+            doughnutChart.resize();
+            lineChart.resize();
+            barCanalesChart.resize();
+        } catch(e) { console.log(e); }
+    }
+
+    // Asignar evento click a cada toggle
+    toggleItems.forEach(toggle => {
+        // buscamos el checkbox interno pero lo manejamos con clase active
+        const check = toggle.querySelector('input');
+        toggle.addEventListener('click', (e) => {
+            // Evitar doble toggle si se cliquea el checkbox pero usamos el div completo
+            e.stopPropagation();
+            // Cambiar estado de clase active
+            if (toggle.classList.contains('active')) {
+                toggle.classList.remove('active');
+                if (check) check.checked = false;
+            } else {
+                toggle.classList.add('active');
+                if (check) check.checked = true;
+            }
+            updateDashboardVisibility();
+        });
+        // Sincronizar el estado inicial del checkbox con la clase activa
+        if (check) {
+            check.checked = toggle.classList.contains('active');
+            // Prevenir que el input propio no genere conflictos
+            check.addEventListener('click', (e) => e.stopPropagation());
+        }
+    });
+
+    // Reset: activar todos los toggles y mostrar todas las tarjetas
+    resetBtn.addEventListener('click', () => {
+        toggleItems.forEach(toggle => {
+            toggle.classList.add('active');
+            const check = toggle.querySelector('input');
+            if (check) check.checked = true;
+        });
+        updateDashboardVisibility();
+    });
+
+    // Añadir también interacción extra: La tarjeta de canales y datos dinámicos actualizan total general
+    // Para mantener un feeling interactivo adicional, agregamos un mini efecto hover en tarjetas y reseteo
+    // También permitimos que si se oculta/muestra todo, los gráficos sigan responsive.
+
+    // Por último inicializar una pequeña simulación: mostrar total actual en tiempo real? no necesario
+    // Asegurar que el gráfico de canales se vea correctamente con indexAxis: 'y' ya definido
+
+    // Hacer que al hacer click en cualquier lugar sensible pero no romper. Y si se quiere redibujar bien al cambiar tamaños,
+    // se agrega event listener de resize de ventana: redimencionar todos los gráficos suavemente
+    window.addEventListener('resize', () => {
+        if (barChart) barChart.resize();
+        if (doughnutChart) doughnutChart.resize();
+        if (lineChart) lineChart.resize();
+        if (barCanalesChart) barCanalesChart.resize();
+    });
+
+    // Por si algún gráfico no es visible al inicio pero al hacer toggle se vuelve visible, resize extra ayuda.
+    // Simplemente ejecutamos un timer para asegurar que en algunos navegadores no quede pequeño.
+    setTimeout(() => {
+        if (barChart) barChart.resize();
+        if (doughnutChart) doughnutChart.resize();
+        if (lineChart) lineChart.resize();
+        if (barCanalesChart) barCanalesChart.resize();
+    }, 200);
+    
+    // Actualización de KPI's totales dinámicamente cuando se cambie algo? La información base es estática, 
+    // pero podría añadirse un mock de "ventas en tiempo real" pero optamos por inventar una interacción sutil:
+    // Añadimos un pequeño efecto en las tarjetas que muestra un tooltip al usuario: 
+    // No necesario, pero dashboard interactivo cumple con toggle y todos los gráficos.
+    console.log("Dashboard Avellana listo ✅");
+
+
+// =========================
+// CARGA EXCEL DESDE GITHUB
+// =========================
+
+async function cargarDatosExcel() {
+
+    try {
+
+        const response = await fetch('./avellana_data.xlsx');
+        const data = await response.arrayBuffer();
+
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        // Ventas mensuales
+        const ventasSheet = workbook.Sheets['VentasMensuales'];
+        const ventasData = XLSX.utils.sheet_to_json(ventasSheet);
+
+        const labelsVentas = ventasData.map(x => x.Mes);
+        const valoresVentas = ventasData.map(x => x.VentasK);
+
+        barChart.data.labels = labelsVentas;
+        barChart.data.datasets[0].data = valoresVentas;
+        barChart.update();
+
+        document.getElementById('octKpi').innerText = `$${valoresVentas[0]}K`;
+        document.getElementById('novKpi').innerText = `$${valoresVentas[1]}K`;
+        document.getElementById('dicKpi').innerText = `$${valoresVentas[2]}K`;
+
+        const total = valoresVentas.reduce((a,b)=>a+b,0);
+        document.getElementById('totalVentasSpan').innerText = `$${total}K`;
+
+        // Productos
+        const prodSheet = workbook.Sheets['TopProductos'];
+        const prodData = XLSX.utils.sheet_to_json(prodSheet);
+
+        doughnutChart.data.labels = prodData.map(x => x.Producto);
+        doughnutChart.data.datasets[0].data = prodData.map(x => x.VentasK);
+        doughnutChart.update();
+
+        // Semanal
+        const semSheet = workbook.Sheets['VentasSemanales'];
+        const semData = XLSX.utils.sheet_to_json(semSheet);
+
+        lineChart.data.labels = semData.map(x => x.Semana);
+        lineChart.data.datasets[0].data = semData.map(x => x.VentasK);
+        lineChart.update();
+
+        // Canales
+        const canalesSheet = workbook.Sheets['CanalesVenta'];
+        const canalesData = XLSX.utils.sheet_to_json(canalesSheet);
+
+        barCanalesChart.data.labels = canalesData.map(x => x.Canal);
+        barCanalesChart.data.datasets[0].data = canalesData.map(x => x.VentasK);
+        barCanalesChart.update();
+
+        console.log('Datos Excel actualizados');
+
+    } catch(err) {
+
+        console.error(err);
+        alert('No se pudo leer el Excel. Verifica que el archivo esté en el mismo repositorio.');
+
+    }
+}
+
+document.getElementById('actualizarDatosBtn').addEventListener('click', cargarDatosExcel);
+
+// Carga automática inicial
+cargarDatosExcel();
+
+
+</script>
+</body>
+</html>
