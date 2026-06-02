@@ -136,11 +136,9 @@ async function inicializarDashboard() {
         "Inicializando dashboard..."
     );
 
-    await cargarExcel();
+await cargarExcel();
 
-    console.log(
-        dashboardData
-    );
+crearGraficosResumen();
 
 }
 
@@ -415,6 +413,277 @@ function crearAntiguedadGTQ() {
                             2170000
 
                         ],
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    indexAxis:"y",
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
+
+function crearGraficosResumen(){
+
+    crearPieRotacionResumen();
+
+    crearInventarioResumen();
+
+    crearAntiguedadUsoResumen();
+
+    crearAntiguedadGTQResumen();
+
+    actualizarKPIsResumen();
+
+}
+function actualizarKPIsResumen(){
+
+    document.getElementById(
+        "rotacionGlobal"
+    ).innerText =
+        dashboardData
+        .resumen
+        .rotacionGlobal
+        .toFixed(2);
+
+    document.getElementById(
+        "clasificacionGlobal"
+    ).innerText =
+        dashboardData
+        .resumen
+        .clasificacion;
+
+    document.getElementById(
+        "skuTotal"
+    ).innerText =
+        dashboardData
+        .resumen
+        .skuTotal;
+
+}
+function crearPieRotacionResumen(){
+
+    const ctx =
+        document.getElementById(
+            "chartSkuRotacion"
+        );
+
+    charts.rotacion =
+        new Chart(
+            ctx,
+            {
+
+                type:"doughnut",
+
+                data:{
+
+                    labels:[
+
+                        "Alta",
+                        "Media",
+                        "Muy Baja",
+                        "Sin Rotación"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .resumen
+                            .skuRotacion,
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
+function crearInventarioResumen(){
+
+    const ctx =
+        document.getElementById(
+            "chartInventario"
+        );
+
+    charts.inventario =
+        new Chart(
+            ctx,
+            {
+
+                type:"bar",
+
+                data:{
+
+                    labels:[
+
+                        "Alta",
+                        "Media",
+                        "Muy Baja",
+                        "Sin Rotación"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .resumen
+                            .inventarioRotacion,
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    indexAxis:"y",
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
+function crearAntiguedadUsoResumen(){
+
+    const ctx =
+        document.getElementById(
+            "chartAntiguedadUso"
+        );
+
+    charts.antiguedadUso =
+        new Chart(
+            ctx,
+            {
+
+                type:"doughnut",
+
+                data:{
+
+                    labels:[
+
+                        "<1 año",
+                        "1-3 años",
+                        "3-5 años",
+                        ">5 años"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .resumen
+                            .antiguedadUso,
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
+function crearAntiguedadGTQResumen(){
+
+    const ctx =
+        document.getElementById(
+            "chartAntiguedadGTQ"
+        );
+
+    charts.antiguedadGTQ =
+        new Chart(
+            ctx,
+            {
+
+                type:"bar",
+
+                data:{
+
+                    labels:[
+
+                        "<1 año",
+                        "1-3 años",
+                        "3-5 años",
+                        ">5 años"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .resumen
+                            .antiguedadGTQ,
 
                         backgroundColor:[
 
