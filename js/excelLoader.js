@@ -46,6 +46,8 @@ async function cargarExcel() {
         procesarResumen();
 
         procesarMRP();
+        dashboardData.ultimaCarga =
+    new Date();
 
     }
     catch(error){
