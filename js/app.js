@@ -136,6 +136,8 @@ async function inicializarDashboard() {
         "Inicializando dashboard..."
     );
 
+    await cargarExcel();
+
     crearGraficosDemo();
 
 }
