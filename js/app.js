@@ -138,7 +138,9 @@ async function inicializarDashboard() {
 
     await cargarExcel();
 
-    crearGraficosDemo();
+    console.log(
+        dashboardData
+    );
 
 }
 
