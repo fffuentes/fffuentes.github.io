@@ -44,10 +44,10 @@ async function cargarExcel() {
         );
 
         procesarResumen();
-
         procesarMRP();
-        dashboardData.ultimaCarga =
-    new Date();
+        procesarRotacionSKU();
+
+        dashboardData.ultimaCarga = new Date();
 
     }
     catch(error){
@@ -214,5 +214,27 @@ console.log(
     "MRP procesado",
     dashboardData.mrp
 );
+
+}
+function procesarRotacionSKU(){
+
+    const hoja =
+        dashboardData
+        .workbook
+        .Sheets["Rotacion_SKU"];
+
+    const datos =
+        XLSX.utils
+        .sheet_to_json(
+            hoja,
+            {
+                header:1
+            }
+        );
+
+    console.log(
+        "Rotacion SKU",
+        datos
+    );
 
 }
