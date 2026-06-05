@@ -218,14 +218,25 @@ console.log(
 }
 function procesarRotacionSKU(){
 
+    console.log(
+        "Entrando a procesarRotacionSKU"
+    );
+
+    console.log(
+        dashboardData.workbook.SheetNames
+    );
+
     const hoja =
         dashboardData
         .workbook
         .Sheets["Rotacion_SKU"];
 
+    console.log(
+        hoja
+    );
+
     const datos =
-        XLSX.utils
-        .sheet_to_json(
+        XLSX.utils.sheet_to_json(
             hoja,
             {
                 header:1
