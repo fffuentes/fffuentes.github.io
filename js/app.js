@@ -790,3 +790,235 @@ function actualizarKPIsMRP(){
         );
 
 }
+function crearPieRotacionMRP(){
+
+    const ctx =
+        document.getElementById(
+            "chartMRPRotacion"
+        );
+
+    charts.mrpRotacion =
+        new Chart(
+            ctx,
+            {
+
+                type:"doughnut",
+
+                data:{
+
+                    labels:[
+
+                        "Alta",
+                        "Media",
+                        "Muy Baja",
+                        "Sin Rotación"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .mrp
+                            .skuRotacion,
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
+function crearInventarioMRP(){
+
+    const ctx =
+        document.getElementById(
+            "chartMRPInventario"
+        );
+
+    charts.mrpInventario =
+        new Chart(
+            ctx,
+            {
+
+                type:"bar",
+
+                data:{
+
+                    labels:[
+
+                        "Alta",
+                        "Media",
+                        "Muy Baja",
+                        "Sin Rotación"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .mrp
+                            .inventarioRotacion,
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    indexAxis:"y",
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
+function crearAntiguedadUsoMRP(){
+
+    const ctx =
+        document.getElementById(
+            "chartMRPAntiguedadUso"
+        );
+
+    charts.mrpAntiguedadUso =
+        new Chart(
+            ctx,
+            {
+
+                type:"doughnut",
+
+                data:{
+
+                    labels:[
+
+                        "<1 año",
+                        "1-3 años",
+                        "3-5 años",
+                        ">5 años"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .mrp
+                            .antiguedadUso,
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
+function crearAntiguedadGTQMRP(){
+
+    const ctx =
+        document.getElementById(
+            "chartMRPAntiguedadGTQ"
+        );
+
+    charts.mrpAntiguedadGTQ =
+        new Chart(
+            ctx,
+            {
+
+                type:"bar",
+
+                data:{
+
+                    labels:[
+
+                        "<1 año",
+                        "1-3 años",
+                        "3-5 años",
+                        ">5 años"
+
+                    ],
+
+                    datasets:[{
+
+                        data:
+                            dashboardData
+                            .mrp
+                            .antiguedadGTQ,
+
+                        backgroundColor:[
+
+                            "#4da3ff",
+                            "#ef4444",
+                            "#84cc16",
+                            "#8b5cf6"
+
+                        ]
+
+                    }]
+
+                },
+
+                options:{
+
+                    indexAxis:"y",
+
+                    responsive:true,
+
+                    maintainAspectRatio:false
+
+                }
+
+            }
+        );
+
+}
