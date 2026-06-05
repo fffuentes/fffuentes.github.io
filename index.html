@@ -327,16 +327,158 @@
     <!-- ================================================= -->
 
     <section
-        id="mrp"
-        class="tab-content">
+    id="mrp"
+    class="tab-content">
 
-        <div class="coming-soon">
+    <main class="dashboard-grid">
 
-            Resumen MRP
+        <section class="panel indicators-panel">
 
-        </div>
+            <div class="panel-title">
 
-    </section>
+                Indicadores MRP
+
+            </div>
+
+            <div class="kpi-card primary">
+
+                <span class="kpi-label">
+
+                    Rotación Global
+
+                </span>
+
+                <span
+                    id="mrpRotacionGlobal"
+                    class="kpi-value">
+
+                    --
+
+                </span>
+
+                <span
+                    id="mrpClasificacion"
+                    class="kpi-status">
+
+                    --
+
+                </span>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <span class="kpi-label">
+
+                    SKU Totales
+
+                </span>
+
+                <span id="mrpSkuTotal">
+
+                    --
+
+                </span>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <span class="kpi-label">
+
+                    Consumo Anual
+
+                </span>
+
+                <span id="mrpConsumo">
+
+                    --
+
+                </span>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <span class="kpi-label">
+
+                    Inventario
+
+                </span>
+
+                <span id="mrpInventario">
+
+                    --
+
+                </span>
+
+            </div>
+
+        </section>
+
+        <section class="panel chart-panel">
+
+            <div class="panel-title">
+
+                SKU por Rotación (MRP)
+
+            </div>
+
+            <canvas
+                id="chartMRPRotacion">
+
+            </canvas>
+
+        </section>
+
+        <section class="panel chart-panel">
+
+            <div class="panel-title">
+
+                Inventario por Rotación MRP
+
+            </div>
+
+            <canvas
+                id="chartMRPInventario">
+
+            </canvas>
+
+        </section>
+
+        <section class="panel chart-panel">
+
+            <div class="panel-title">
+
+                Antigüedad Uso MRP
+
+            </div>
+
+            <canvas
+                id="chartMRPAntiguedadUso">
+
+            </canvas>
+
+        </section>
+
+        <section class="panel chart-panel wide">
+
+            <div class="panel-title">
+
+                Antigüedad GTQ MRP
+
+            </div>
+
+            <canvas
+                id="chartMRPAntiguedadGTQ">
+
+            </canvas>
+
+        </section>
+
+    </main>
+
+</section>
 
     <!-- ================================================= -->
     <!-- COMPARATIVO -->

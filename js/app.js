@@ -130,15 +130,17 @@ document
 // DASHBOARD
 // =====================================================
 
-async function inicializarDashboard() {
+async function inicializarDashboard(){
 
     console.log(
         "Inicializando dashboard..."
     );
 
-await cargarExcel();
+    await cargarExcel();
 
-crearGraficosResumen();
+    crearGraficosResumen();
+
+    crearGraficosMRP();
 
 }
 
@@ -708,6 +710,82 @@ function crearAntiguedadGTQResumen(){
 
                 }
 
+            }
+        );
+
+}
+function crearGraficosMRP(){
+
+    actualizarKPIsMRP();
+
+    crearPieRotacionMRP();
+
+    crearInventarioMRP();
+
+    crearAntiguedadUsoMRP();
+
+    crearAntiguedadGTQMRP();
+
+}
+function actualizarKPIsMRP(){
+
+    document
+        .getElementById(
+            "mrpRotacionGlobal"
+        )
+        .innerText =
+        dashboardData
+        .mrp
+        .rotacionGlobal
+        .toFixed(2);
+
+    document
+        .getElementById(
+            "mrpClasificacion"
+        )
+        .innerText =
+        dashboardData
+        .mrp
+        .clasificacion;
+
+    document
+        .getElementById(
+            "mrpSkuTotal"
+        )
+        .innerText =
+        dashboardData
+        .mrp
+        .skuTotal;
+
+    document
+        .getElementById(
+            "mrpConsumo"
+        )
+        .innerText =
+        dashboardData
+        .mrp
+        .consumoAnual
+        .toLocaleString(
+            "es-GT",
+            {
+                style:"currency",
+                currency:"GTQ"
+            }
+        );
+
+    document
+        .getElementById(
+            "mrpInventario"
+        )
+        .innerText =
+        dashboardData
+        .mrp
+        .inventario
+        .toLocaleString(
+            "es-GT",
+            {
+                style:"currency",
+                currency:"GTQ"
             }
         );
 
