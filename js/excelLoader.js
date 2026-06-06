@@ -130,10 +130,6 @@ function procesarResumen(){
 
 };
 
-console.log(
-    "Resumen procesado",
-    dashboardData.resumen
-);
 
 }
 
@@ -210,30 +206,14 @@ function procesarMRP(){
 
 };
 
-console.log(
-    "MRP procesado",
-    dashboardData.mrp
-);
 
 }
 function procesarRotacionSKU(){
 
-    console.log(
-        "Entrando a procesarRotacionSKU"
-    );
-
-    console.log(
-        dashboardData.workbook.SheetNames
-    );
-
     const hoja =
         dashboardData
         .workbook
-        .Sheets["Rotacion_SKU"];
-
-    console.log(
-        hoja
-    );
+        .Sheets["Rotación_SKU"];
 
     const datos =
         XLSX.utils.sheet_to_json(
@@ -243,9 +223,50 @@ function procesarRotacionSKU(){
             }
         );
 
-    console.log(
-        "Rotacion SKU",
+    dashboardData.rotacionSKU =
         datos
-    );
+        .slice(1)
+        .map(fila => ({
+
+            sku:
+                fila[0],
+
+            descripcion:
+                fila[1],
+
+            inventario:
+                Number(fila[2]) || 0,
+
+            consumo:
+                Number(fila[3]) || 0,
+
+            fechaUltimoConsumo:
+                fila[4],
+
+            diasSinConsumo:
+                Number(fila[5]) || 0,
+
+            ultimoIngreso:
+                fila[6],
+
+            rotacion:
+                Number(fila[7]) || 0,
+
+            clasificacion:
+                fila[8],
+
+            claseValor:
+                fila[9],
+
+            antiguedad:
+                fila[10],
+
+            antiguedadDetalle:
+                fila[11],
+
+            mrp:
+                fila[12]
+
+        }));
 
 }

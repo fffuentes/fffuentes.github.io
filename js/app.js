@@ -142,6 +142,8 @@ async function inicializarDashboard(){
 
     crearGraficosMRP();
 
+    cargarAnalisisSKU();
+
 }
 
 
@@ -1020,5 +1022,158 @@ function crearAntiguedadGTQMRP(){
 
             }
         );
+
+}
+function cargarAnalisisSKU(){
+
+    cargarTopInventario();
+
+    cargarTopSinRotacion();
+
+    iniciarBuscadorSKU();
+
+}
+function cargarTopInventario(
+    filtro = ""
+){
+
+    const top =
+    dashboardData.rotacionSKU
+    .filter(item => item && item.sku)
+    .filter(item =>
+
+        (item.sku || "")
+    .toString()
+    .includes(filtro)
+
+        ||
+
+        item.descripcion
+            .toLowerCase()
+            .includes(filtro)
+
+    )
+        .sort(
+            (a,b) =>
+                b.inventario - a.inventario
+        )
+        .slice(0,20);
+
+    let html = `
+        <table class="tabla-sku">
+            <tr>
+                <th>SKU</th>
+                <th>Descripción</th>
+                <th>Inventario</th>
+            </tr>
+    `;
+
+    top.forEach(item => {
+
+        html += `
+            <tr>
+                <td>${item.sku}</td>
+                <td>${item.descripcion}</td>
+                <td>Q ${item.inventario.toLocaleString()}</td>
+            </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    document.getElementById(
+        "topInventario"
+    ).innerHTML = html;
+
+}
+function cargarTopSinRotacion(
+    filtro = ""
+){
+
+    const top =
+    dashboardData.rotacionSKU
+    .filter(item => item && item.sku)
+        .filter(item =>
+
+            item.claseValor ===
+                "Sin rotación"
+
+            &&
+
+            (
+
+                (item.sku || "")
+                    .toString()
+                    .includes(filtro)
+
+                ||
+
+                item.descripcion
+                    .toLowerCase()
+                    .includes(filtro)
+
+            )
+
+        )
+        .sort(
+            (a,b) =>
+                b.inventario - a.inventario
+        )
+        .slice(0,20);
+
+    let html = `
+        <table class="tabla-sku">
+            <tr>
+                <th>SKU</th>
+                <th>Descripción</th>
+                <th>Inventario</th>
+            </tr>
+    `;
+
+    top.forEach(item => {
+
+        html += `
+            <tr>
+                <td>${item.sku}</td>
+                <td>${item.descripcion}</td>
+                <td>Q ${item.inventario.toLocaleString()}</td>
+            </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    document.getElementById(
+        "topSinRotacion"
+    ).innerHTML = html;
+
+}
+function iniciarBuscadorSKU(){
+
+    const txtBuscar =
+        document.getElementById(
+            "txtBuscarSKU"
+        );
+
+    txtBuscar.addEventListener(
+        "input",
+        () => {
+
+            const texto =
+                txtBuscar.value
+                .toLowerCase();
+
+            cargarTopInventario(
+                texto
+            );
+
+            cargarTopSinRotacion(
+                texto
+            );
+
+        }
+    );
 
 }

@@ -571,3 +571,54 @@ canvas {
     }
 
 }
+.analisis-container{
+
+    display:grid;
+
+    gap:20px;
+
+}
+
+#txtBuscarSKU{
+
+    width:100%;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    border:none;
+
+    font-size:16px;
+
+}
+
+.tabla-sku{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.tabla-sku th{
+
+    background:#1d3f6e;
+
+    color:white;
+
+    padding:10px;
+
+    text-align:left;
+
+}
+
+.tabla-sku td{
+
+    padding:8px;
+
+    border-bottom:1px solid rgba(255,255,255,.1);
+
+    color:white;
+
+}

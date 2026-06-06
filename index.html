@@ -99,9 +99,9 @@
 
         <button
             class="tab"
-            data-tab="comparativo">
+            data-tab="analisis">
 
-            Comparativo
+            Análisis SKU
 
         </button>
 
@@ -481,20 +481,61 @@
 </section>
 
     <!-- ================================================= -->
-    <!-- COMPARATIVO -->
+    <!-- ANALISIS SKU -->
     <!-- ================================================= -->
 
     <section
-        id="comparativo"
-        class="tab-content">
+    id="analisis"
+    class="tab-content">
 
-        <div class="coming-soon">
+    <div class="analisis-container">
 
-            Comparativo
+        <div class="panel">
+
+            <div class="panel-title">
+
+                Buscar SKU
+
+            </div>
+
+            <input
+                type="text"
+                id="txtBuscarSKU"
+                placeholder="Buscar SKU o descripción">
 
         </div>
 
-    </section>
+        <div class="panel">
+
+            <div class="panel-title">
+
+                Top 20 Inventario
+
+            </div>
+
+            <div id="topInventario">
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <div class="panel-title">
+
+                Top 20 Sin Rotación
+
+            </div>
+
+            <div id="topSinRotacion">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
     <!-- JS -->
 
