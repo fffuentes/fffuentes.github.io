@@ -488,6 +488,135 @@
     id="analisis"
     class="tab-content">
 
+<div class="kpi-grid">
+
+    <div class="kpi-card">
+        <span class="kpi-label">
+            SKU Totales
+        </span>
+
+        <span
+            class="kpi-value"
+            id="kpiSkuTotal">
+
+            -
+
+        </span>
+    </div>
+
+    <div class="kpi-card">
+        <span class="kpi-label">
+            Sin Rotación
+        </span>
+
+        <span
+            class="kpi-value"
+            id="kpiSinRotacion">
+
+            -
+
+        </span>
+    </div>
+
+    <div class="kpi-card">
+        <span class="kpi-label">
+            Valor Sin Rotación
+        </span>
+
+        <span
+            class="kpi-value"
+            id="kpiValorSinRotacion">
+
+            -
+
+        </span>
+    </div>
+
+    <div class="kpi-card">
+        <span class="kpi-label">
+            Inventario Total
+        </span>
+
+        <span
+            class="kpi-value"
+            id="kpiInventarioTotal">
+
+            -
+
+        </span>
+    </div>
+
+    <div class="kpi-card">
+        <span class="kpi-label">
+            SKU MRP
+        </span>
+
+        <span
+            class="kpi-value"
+            id="kpiMRP">
+
+            -
+
+        </span>
+    </div>
+
+    <div class="kpi-card">
+
+    <span class="kpi-label">
+
+        Obsolescencia
+
+    </span>
+
+    <span
+        class="kpi-value"
+        id="kpiObsolescencia">
+
+        -
+
+    </span>
+
+</div>
+
+</div>
+
+<!--Panel del pareto --> 
+<div class="panel">
+
+    <div class="panel-title">
+
+        Pareto de Inventario
+
+    </div>
+
+    <div
+    id="resumenPareto"
+    class="pareto-resumen">
+
+    </div>
+    
+    <canvas id="graficoPareto"></canvas>
+
+</div>
+
+<!--Panel de tarjetas -->
+<div class="panel">
+
+    <div class="panel-title">
+
+        Riesgos Detectados
+
+    </div>
+
+    <div
+        id="panelRiesgos"
+        class="riesgos-grid">
+
+    </div>
+
+</div>
+
+<!--Panel de búsqueda y top 20-->
     <div class="analisis-container">
 
         <div class="panel">
@@ -534,6 +663,21 @@
         </div>
 
     </div>
+
+    <div class="panel">
+
+    <div class="panel-title">
+
+        Top 20 Obsolescencia (> 5 años)
+
+    </div>
+
+    <div
+        id="tablaObsolescencia">
+
+    </div>
+
+</div>
 
 </section>
 

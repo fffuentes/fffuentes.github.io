@@ -147,13 +147,28 @@ async function inicializarDashboard(){
 }
 
 
-async function refrescarDashboard() {
+async function refrescarDashboard(){
 
-    console.log(
-        "Refrescando..."
-    );
+    await cargarExcel();
 
-    // Aquí leeremos Excel
+    Object.values(charts)
+        .forEach(chart => {
+
+            if(chart){
+
+                chart.destroy();
+
+            }
+
+        });
+
+    charts = {};
+
+    crearGraficosResumen();
+
+    crearGraficosMRP();
+
+    cargarAnalisisSKU();
 
 }
 
@@ -482,6 +497,38 @@ function actualizarKPIsResumen(){
         dashboardData
         .resumen
         .skuTotal;
+
+    const inventarioTotal =
+
+    dashboardData
+    .resumen
+    .inventarioRotacion
+    .reduce(
+        (a,b)=>a+b,
+        0
+    );
+
+document.getElementById(
+    "inventarioTotal"
+).innerText =
+
+    "Q " +
+
+    (
+        inventarioTotal /
+        1000000
+    ).toFixed(2)
+
+    + " MM";
+
+document.getElementById(
+    "sinRotacion"
+).innerText =
+
+    dashboardData
+    .resumen
+    .skuRotacion[3]
+    .toLocaleString();
 
 }
 function crearPieRotacionResumen(){
@@ -1026,9 +1073,19 @@ function crearAntiguedadGTQMRP(){
 }
 function cargarAnalisisSKU(){
 
+    cargarKPIsSKU();
+
+    crearParetoInventario();
+
+    calcularPareto80();
+
+    cargarRiesgos();
+
     cargarTopInventario();
 
     cargarTopSinRotacion();
+
+    cargarTopObsolescencia();
 
     iniciarBuscadorSKU();
 
@@ -1173,7 +1230,652 @@ function iniciarBuscadorSKU(){
                 texto
             );
 
+            cargarTopObsolescencia(
+                texto
+            );
+
         }
     );
 
 }
+function cargarKPIsSKU(){
+
+    const skuTotal =
+        dashboardData.rotacionSKU.length;
+
+    const sinRotacion =
+        dashboardData.rotacionSKU
+        .filter(
+            x =>
+                x.claseValor ===
+                "Sin rotación"
+        )
+        .length;
+
+    const valorSinRotacion =
+        dashboardData.rotacionSKU
+        .filter(
+            x =>
+                x.claseValor ===
+                "Sin rotación"
+        )
+        .reduce(
+            (a,b) =>
+                a + b.inventario,
+            0
+        );
+
+    const inventarioTotal =
+        dashboardData.rotacionSKU
+        .reduce(
+            (a,b) =>
+                a + b.inventario,
+            0
+        );
+
+    const mrp =
+        dashboardData.rotacionSKU
+        .filter(
+            x =>
+                x.mrp ===
+                "MRP"
+        )
+        .length;
+
+    document.getElementById(
+        "kpiSkuTotal"
+    ).textContent =
+        skuTotal.toLocaleString();
+
+    document.getElementById(
+        "kpiSinRotacion"
+    ).textContent =
+        sinRotacion.toLocaleString();
+
+    document.getElementById(
+        "kpiValorSinRotacion"
+    ).textContent =
+        "Q " +
+        (
+            valorSinRotacion /
+            1000000
+        ).toFixed(2) +
+        " MM";
+
+    document.getElementById(
+        "kpiInventarioTotal"
+    ).textContent =
+        "Q " +
+        (
+            inventarioTotal /
+            1000000
+        ).toFixed(2) +
+        " MM";
+
+    document.getElementById(
+        "kpiMRP"
+    ).textContent =
+        mrp.toLocaleString();
+
+const obsoletos =
+    dashboardData.rotacionSKU
+    .filter(
+        x =>
+            x.antiguedad ===
+            "Mayor 5 años"
+    );
+
+const valorObsoletos =
+    obsoletos.reduce(
+        (a,b)=>
+            a+b.inventario,
+        0
+    );
+
+document.getElementById(
+    "kpiObsolescencia"
+).innerHTML =
+
+    `${obsoletos.length}
+    <br>
+    <small>
+        Q ${(valorObsoletos/1000000).toFixed(2)} MM
+    </small>`;
+
+}
+
+let chartPareto = null;
+
+function crearParetoInventario(){
+
+    const datos =
+        [...dashboardData.rotacionSKU]
+
+        .filter(
+            x => x.inventario > 0
+        )
+
+        .sort(
+            (a,b) =>
+                b.inventario - a.inventario
+        )
+
+        .slice(0,50);
+
+    const total =
+        dashboardData.rotacionSKU
+        .reduce(
+            (a,b) =>
+                a + b.inventario,
+            0
+        );
+
+    let acumulado = 0;
+
+    const labels = [];
+    const inventario = [];
+    const porcentaje = [];
+
+    datos.forEach(item=>{
+
+        acumulado +=
+            item.inventario;
+
+        labels.push(
+            item.sku
+        );
+
+        inventario.push(
+            item.inventario
+        );
+
+        porcentaje.push(
+
+            (
+                acumulado /
+                total
+            ) * 100
+
+        );
+
+    });
+
+    const ctx =
+        document.getElementById(
+            "graficoPareto"
+        );
+
+    if(chartPareto){
+
+        chartPareto.destroy();
+
+    }
+
+    chartPareto =
+        new Chart(
+            ctx,
+            {
+
+                data:{
+
+                    labels,
+
+                    datasets:[
+
+                        {
+
+                            type:"bar",
+
+                            label:
+                                "Inventario",
+
+                            data:
+                                inventario,
+
+                            backgroundColor:
+                                "#173c73"
+
+                        },
+
+                        {
+
+                            type:"line",
+
+                            label:
+                                "% acumulado",
+
+                            data:
+                                porcentaje,
+
+                            borderColor:
+                                "#8b5cf6",
+
+                            backgroundColor:
+                                "#8b5cf6",
+
+                            tension:0.3,
+
+                            yAxisID:"y1"
+
+                        },
+
+                        {
+
+                            type:"line",
+
+                            label:
+                                "Objetivo 80%",
+
+                            data:
+                                labels.map(
+                                    ()=>80
+                                ),
+
+                            borderColor:
+                                "#ffcc00",
+
+                            borderDash:
+                                [8,8],
+
+                            pointRadius:
+                                0,
+
+                            yAxisID:"y1"
+
+                        }
+
+                    ]
+
+                },
+
+                options:{
+
+                    responsive:true,
+
+                    maintainAspectRatio:false,
+
+                    plugins:{
+
+                        legend:{
+
+                            labels:{
+
+                                color:"white"
+
+                            }
+
+                        }
+
+                    },
+
+                    scales:{
+
+                        x:{
+
+                            ticks:{
+
+                                color:"white"
+
+                            }
+
+                        },
+
+                        y:{
+
+                            position:"left",
+
+                            ticks:{
+
+                                color:"white"
+
+                            }
+
+                        },
+
+                        y1:{
+
+                            position:"right",
+
+                            min:0,
+
+                            max:100,
+
+                            grid:{
+
+                                drawOnChartArea:false
+
+                            },
+
+                            ticks:{
+
+                                color:"white",
+
+                                callback:
+                                    value =>
+                                    value + "%"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+}
+
+function calcularPareto80(){
+
+    const datos =
+        [...dashboardData.rotacionSKU]
+
+        .filter(
+            x => x.inventario > 0
+        )
+
+        .sort(
+            (a,b) =>
+                b.inventario - a.inventario
+        );
+
+    const total =
+        datos.reduce(
+            (a,b) =>
+                a + b.inventario,
+            0
+        );
+
+    let acumulado = 0;
+
+    let cantidadSKU = 0;
+
+    for(const item of datos){
+
+        acumulado +=
+            item.inventario;
+
+        cantidadSKU++;
+
+        if(
+            acumulado / total >= 0.80
+        ){
+
+            break;
+
+        }
+
+    }
+
+    document
+        .getElementById(
+            "resumenPareto"
+        )
+        .innerHTML = `
+
+            <strong>
+                Pareto de Inventario
+            </strong>
+
+            <br><br>
+
+            ${cantidadSKU}
+            SKU representan
+            ${(
+                acumulado / total * 100
+            ).toFixed(1)}%
+
+            del inventario total.
+
+            <br><br>
+
+            Valor acumulado:
+
+            <strong>
+
+                Q ${acumulado.toLocaleString(
+                    "es-GT",
+                    {
+                        minimumFractionDigits:2,
+                        maximumFractionDigits:2
+                    }
+                )}
+
+            </strong>
+
+        `;
+
+}
+
+function cargarRiesgos(){
+
+    const totalInventario =
+        dashboardData.rotacionSKU
+        .reduce(
+            (a,b)=>a+b.inventario,
+            0
+        );
+
+    const sinRotacion =
+        dashboardData.rotacionSKU
+        .filter(
+            x =>
+                x.claseValor ===
+                "Sin rotación"
+        );
+
+    const valorSinRotacion =
+        sinRotacion.reduce(
+            (a,b)=>a+b.inventario,
+            0
+        );
+
+    const porcentaje =
+        (
+            valorSinRotacion /
+            totalInventario
+        ) * 100;
+
+    let clase =
+        "riesgo-bajo";
+
+    let nivel =
+        "BAJO";
+
+    if(porcentaje > 70){
+
+        clase =
+            "riesgo-alto";
+
+        nivel =
+            "ALTO";
+
+    }
+    else if(porcentaje > 40){
+
+        clase =
+            "riesgo-medio";
+
+        nivel =
+            "MEDIO";
+
+    }
+
+    document
+        .getElementById(
+            "panelRiesgos"
+        )
+        .innerHTML =
+
+        `
+            <div class="riesgo-card ${clase}">
+
+                <div class="riesgo-titulo">
+                    Inventario Sin Rotación
+                </div>
+
+                <div class="riesgo-valor">
+                    Q ${(valorSinRotacion/1000000).toFixed(2)} MM
+                </div>
+
+                <div>
+                    ${porcentaje.toFixed(1)}%
+                    del inventario total
+                </div>
+
+                <div>
+                    Riesgo ${nivel}
+                </div>
+
+            </div>
+
+            <div class="riesgo-card riesgo-medio">
+
+                <div class="riesgo-titulo">
+                    SKU Sin Rotación
+                </div>
+
+                <div class="riesgo-valor">
+                    ${sinRotacion.length}
+                </div>
+
+                <div>
+                    SKU inmovilizados
+                </div>
+
+            </div>
+
+            <div class="riesgo-card riesgo-bajo">
+
+                <div class="riesgo-titulo">
+                    SKU MRP
+                </div>
+
+                <div class="riesgo-valor">
+                    ${dashboardData.mrp.skuTotal}
+                </div>
+
+                <div>
+                    Materiales controlados
+                </div>
+
+            </div>
+        `;
+}
+
+function cargarTopObsolescencia(
+    filtro = ""
+){
+
+    const datos =
+
+    dashboardData.rotacionSKU
+
+    .filter(item =>
+
+        item.antiguedad ===
+            "Mayor 5 años"
+
+        &&
+
+        (
+
+            item.sku
+                .toString()
+                .includes(filtro)
+
+            ||
+
+            item.descripcion
+                .toLowerCase()
+                .includes(filtro)
+
+        )
+
+    )
+
+        .sort(
+            (a,b)=>
+                b.inventario -
+                a.inventario
+        )
+
+        .slice(0,20);
+
+    let html =
+
+        `
+        <table class="tabla-sku">
+
+            <thead>
+
+                <tr>
+
+                    <th>SKU</th>
+
+                    <th>Descripción</th>
+
+                    <th>Inventario</th>
+
+                    <th>Antigüedad</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+        `;
+
+    datos.forEach(item=>{
+
+        html +=
+
+        `
+        <tr>
+
+            <td>
+                ${item.sku}
+            </td>
+
+            <td>
+                ${item.descripcion}
+            </td>
+
+            <td>
+
+                Q
+                ${item.inventario
+                    .toLocaleString(
+                        "es-GT"
+                    )}
+
+            </td>
+            <td>
+
+                ${item.antiguedad}
+
+            </td>
+
+        </tr>
+        `;
+
+    });
+
+    html +=
+
+        `
+            </tbody>
+        </table>
+        `;
+
+    document
+        .getElementById(
+            "tablaObsolescencia"
+        )
+        .innerHTML = html;
+
+}
+
