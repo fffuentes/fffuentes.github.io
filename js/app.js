@@ -533,234 +533,91 @@ document.getElementById(
 }
 function crearPieRotacionResumen(){
 
-    const ctx =
-        document.getElementById(
-            "chartSkuRotacion"
-        );
+    const data = {
+        labels: ["Alta","Media","Muy Baja","Sin Rotación"],
+        datasets: [{
+            data: dashboardData.resumen.skuRotacion,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.rotacion =
-        new Chart(
-            ctx,
-            {
+    if(charts.rotacion){
+        charts.rotacion.destroy();
+    }
 
-                type:"doughnut",
-
-                data:{
-
-                    labels:[
-
-                        "Alta",
-                        "Media",
-                        "Muy Baja",
-                        "Sin Rotación"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .resumen
-                            .skuRotacion,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.rotacion = ChartFactory.createChart("chartSkuRotacion","doughnut",data);
 
 }
 function crearInventarioResumen(){
 
-    const ctx =
-        document.getElementById(
-            "chartInventario"
-        );
+    const data = {
+        labels: ["Alta","Media","Muy Baja","Sin Rotación"],
+        datasets: [{
+            data: dashboardData.resumen.inventarioRotacion,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.inventario =
-        new Chart(
-            ctx,
-            {
+    if(charts.inventario){
+        charts.inventario.destroy();
+    }
 
-                type:"bar",
-
-                data:{
-
-                    labels:[
-
-                        "Alta",
-                        "Media",
-                        "Muy Baja",
-                        "Sin Rotación"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .resumen
-                            .inventarioRotacion,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    indexAxis:"y",
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.inventario = ChartFactory.createChart("chartInventario","bar",data,{ indexAxis: "y" });
 
 }
 function crearAntiguedadUsoResumen(){
 
-    const ctx =
-        document.getElementById(
-            "chartAntiguedadUso"
-        );
+    const data = {
+        labels: ["<1 año","1-3 años","3-5 años",">5 años"],
+        datasets: [{
+            data: dashboardData.resumen.antiguedadUso,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.antiguedadUso =
-        new Chart(
-            ctx,
-            {
+    if(charts.antiguedadUso){
+        charts.antiguedadUso.destroy();
+    }
 
-                type:"doughnut",
-
-                data:{
-
-                    labels:[
-
-                        "<1 año",
-                        "1-3 años",
-                        "3-5 años",
-                        ">5 años"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .resumen
-                            .antiguedadUso,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.antiguedadUso = ChartFactory.createChart("chartAntiguedadUso","doughnut",data);
 
 }
 function crearAntiguedadGTQResumen(){
 
-    const ctx =
-        document.getElementById(
-            "chartAntiguedadGTQ"
-        );
+    const data = {
+        labels: ["<1 año","1-3 años","3-5 años",">5 años"],
+        datasets: [{
+            label: "GTQ",
+            data: dashboardData.resumen.antiguedadGTQ,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.antiguedadGTQ =
-        new Chart(
-            ctx,
-            {
+    if(charts.antiguedadGTQ){
+        charts.antiguedadGTQ.destroy();
+    }
 
-                type:"bar",
-
-                data:{
-
-                    labels:[
-
-                        "<1 año",
-                        "1-3 años",
-                        "3-5 años",
-                        ">5 años"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .resumen
-                            .antiguedadGTQ,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    indexAxis:"y",
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.antiguedadGTQ = ChartFactory.createChart("chartAntiguedadGTQ","bar",data,{ indexAxis: "y" });
 
 }
 function crearGraficosMRP(){
@@ -841,234 +698,91 @@ function actualizarKPIsMRP(){
 }
 function crearPieRotacionMRP(){
 
-    const ctx =
-        document.getElementById(
-            "chartMRPRotacion"
-        );
+    const data = {
+        labels: ["Alta","Media","Muy Baja","Sin Rotación"],
+        datasets: [{
+            data: dashboardData.mrp.skuRotacion,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.mrpRotacion =
-        new Chart(
-            ctx,
-            {
+    if(charts.mrpRotacion){
+        charts.mrpRotacion.destroy();
+    }
 
-                type:"doughnut",
-
-                data:{
-
-                    labels:[
-
-                        "Alta",
-                        "Media",
-                        "Muy Baja",
-                        "Sin Rotación"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .mrp
-                            .skuRotacion,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.mrpRotacion = ChartFactory.createChart("chartMRPRotacion","doughnut",data);
 
 }
 function crearInventarioMRP(){
 
-    const ctx =
-        document.getElementById(
-            "chartMRPInventario"
-        );
+    const data = {
+        labels: ["Alta","Media","Muy Baja","Sin Rotación"],
+        datasets: [{
+            data: dashboardData.mrp.inventarioRotacion,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.mrpInventario =
-        new Chart(
-            ctx,
-            {
+    if(charts.mrpInventario){
+        charts.mrpInventario.destroy();
+    }
 
-                type:"bar",
-
-                data:{
-
-                    labels:[
-
-                        "Alta",
-                        "Media",
-                        "Muy Baja",
-                        "Sin Rotación"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .mrp
-                            .inventarioRotacion,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    indexAxis:"y",
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.mrpInventario = ChartFactory.createChart("chartMRPInventario","bar",data,{ indexAxis: "y" });
 
 }
 function crearAntiguedadUsoMRP(){
 
-    const ctx =
-        document.getElementById(
-            "chartMRPAntiguedadUso"
-        );
+    const data = {
+        labels: ["<1 año","1-3 años","3-5 años",">5 años"],
+        datasets: [{
+            data: dashboardData.mrp.antiguedadUso,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.mrpAntiguedadUso =
-        new Chart(
-            ctx,
-            {
+    if(charts.mrpAntiguedadUso){
+        charts.mrpAntiguedadUso.destroy();
+    }
 
-                type:"doughnut",
-
-                data:{
-
-                    labels:[
-
-                        "<1 año",
-                        "1-3 años",
-                        "3-5 años",
-                        ">5 años"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .mrp
-                            .antiguedadUso,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.mrpAntiguedadUso = ChartFactory.createChart("chartMRPAntiguedadUso","doughnut",data);
 
 }
 function crearAntiguedadGTQMRP(){
 
-    const ctx =
-        document.getElementById(
-            "chartMRPAntiguedadGTQ"
-        );
+    const data = {
+        labels: ["<1 año","1-3 años","3-5 años",">5 años"],
+        datasets: [{
+            label: "GTQ",
+            data: dashboardData.mrp.antiguedadGTQ,
+            backgroundColor: [
+                ChartConfig.palette.primary,
+                ChartConfig.palette.danger,
+                ChartConfig.palette.success,
+                ChartConfig.palette.purple
+            ]
+        }]
+    };
 
-    charts.mrpAntiguedadGTQ =
-        new Chart(
-            ctx,
-            {
+    if(charts.mrpAntiguedadGTQ){
+        charts.mrpAntiguedadGTQ.destroy();
+    }
 
-                type:"bar",
-
-                data:{
-
-                    labels:[
-
-                        "<1 año",
-                        "1-3 años",
-                        "3-5 años",
-                        ">5 años"
-
-                    ],
-
-                    datasets:[{
-
-                        data:
-                            dashboardData
-                            .mrp
-                            .antiguedadGTQ,
-
-                        backgroundColor:[
-
-                            "#4da3ff",
-                            "#ef4444",
-                            "#84cc16",
-                            "#8b5cf6"
-
-                        ]
-
-                    }]
-
-                },
-
-                options:{
-
-                    indexAxis:"y",
-
-                    responsive:true,
-
-                    maintainAspectRatio:false
-
-                }
-
-            }
-        );
+    charts.mrpAntiguedadGTQ = ChartFactory.createChart("chartMRPAntiguedadGTQ","bar",data,{ indexAxis: "y" });
 
 }
 function cargarAnalisisSKU(){
