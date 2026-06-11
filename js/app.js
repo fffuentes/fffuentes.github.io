@@ -36,39 +36,60 @@ document.addEventListener(
 
 function iniciarTabs() {
 
-    const tabs =
-        document.querySelectorAll(".tab");
+    const tablist = document.querySelector('.tabs');
+    const tabs = Array.from(tablist.querySelectorAll('.tab'));
+    const panels = Array.from(document.querySelectorAll('.tab-content'));
 
-    const contents =
-        document.querySelectorAll(".tab-content");
+    // roles y atributos ARIA
+    tablist.setAttribute('role', 'tablist');
 
-    tabs.forEach(tab => {
+    tabs.forEach((tab, i) => {
+        const panelId = tab.dataset.tab;
+        const panel = document.getElementById(panelId);
 
-        tab.addEventListener(
-            "click",
-            () => {
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-selected', tab.classList.contains('active') ? 'true' : 'false');
+        tab.setAttribute('tabindex', tab.classList.contains('active') ? '0' : '-1');
+        tab.setAttribute('aria-controls', panelId);
 
-                tabs.forEach(
-                    t => t.classList.remove("active")
-                );
+        if (panel) {
+            panel.setAttribute('role', 'tabpanel');
+            panel.setAttribute('aria-hidden', tab.classList.contains('active') ? 'false' : 'true');
+            panel.setAttribute('tabindex', '-1');
+        }
 
-                contents.forEach(
-                    c => c.classList.remove("active")
-                );
-
-                tab.classList.add("active");
-
-                const destino =
-                    tab.dataset.tab;
-
-                document
-                    .getElementById(destino)
-                    .classList.add("active");
-
-            }
-        );
-
+        tab.addEventListener('click', () => activateTab(i));
+        tab.addEventListener('keydown', (e) => handleKeyDown(e, i));
     });
+
+    function activateTab(idx) {
+        tabs.forEach((t, j) => {
+            const selected = j === idx;
+            t.classList.toggle('active', selected);
+            t.setAttribute('aria-selected', selected ? 'true' : 'false');
+            t.setAttribute('tabindex', selected ? '0' : '-1');
+
+            const p = document.getElementById(t.dataset.tab);
+            if (p) {
+                p.classList.toggle('active', selected);
+                p.setAttribute('aria-hidden', selected ? 'false' : 'true');
+            }
+
+            if (selected) t.focus();
+        });
+    }
+
+    function handleKeyDown(e, idx) {
+        const key = e.key;
+        if (["ArrowRight", "ArrowLeft", "Home", "End", "Enter", " "].includes(key)) {
+            e.preventDefault();
+            if (key === "ArrowRight") activateTab((idx + 1) % tabs.length);
+            else if (key === "ArrowLeft") activateTab((idx - 1 + tabs.length) % tabs.length);
+            else if (key === "Home") activateTab(0);
+            else if (key === "End") activateTab(tabs.length - 1);
+            else if (key === "Enter" || key === " ") activateTab(idx);
+        }
+    }
 
 }
 
