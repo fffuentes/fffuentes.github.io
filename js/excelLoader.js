@@ -1,4 +1,4 @@
-// =====================================================
+﻿// =====================================================
 // EXCEL LOADER
 // =====================================================
 
@@ -36,8 +36,19 @@ async function cargarExcel() {
                 }
             );
 
-        dashboardData.workbook =
-            workbook;
+        dashboardData.workbook = workbook;
+
+// VALIDATION: Ensure workbook structure matches expectations
+const validation = (window.Validator && typeof Validator.validateWorkbook === 'function')
+  ? Validator.validateWorkbook(workbook)
+  : { ok: true };
+
+if(!validation.ok){
+  console.error('Workbook validation failed', validation.errors);
+  alert('Error validando Excel:\n' + validation.errors.join('\n'));
+  return;
+}
+
 
         console.log(
             "Excel cargado correctamente"
@@ -270,3 +281,4 @@ function procesarRotacionSKU(){
         }));
 
 }
+
