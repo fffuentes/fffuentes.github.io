@@ -90,7 +90,9 @@ body {
 
     align-items:center;
 
-    padding: 12px
+    padding:
+
+        18px
         28px;
 
     box-shadow:
@@ -235,7 +237,7 @@ body {
 
     display:none;
 
-    padding: 12px;
+    padding:18px;
 
 }
 
@@ -281,7 +283,7 @@ body {
 
     border-radius:16px;
 
-    padding: 12px;
+    padding:18px;
 
     box-shadow:
 
@@ -692,7 +694,7 @@ canvas { display: block; width: 100% !important; height: auto !important; }
     border-left:
         5px solid #8b5cf6;
 
-    padding: 12px;
+    padding:18px;
 
     border-radius:10px;
 
@@ -809,7 +811,7 @@ canvas { display: block; width: 100% !important; height: auto !important; }
 .kpi-card {
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border-radius: var(--card-radius);
-  padding: 12px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -860,8 +862,7 @@ canvas { display: block; width: 100% !important; height: auto !important; }
    FIX: contain chart canvases within panels (prevent overflow)
    Applied: ensure canvas fits panel bounds and does not overflow after layout changes
 ===================================================== */
-.chart-panel { overflow: hidden; padding: 12px; box-sizing: border-box; }
-.chart-panel canvas { width: 100% !important; height: auto !important; display: block; }
+.chart-panel { overflow: hidden; padding: 18px; box-sizing: border-box; }
+.chart-panel canvas { width: 100% !important; height: 100% !important; display: block; }
 .chart-wrapper canvas, .panel > canvas { max-height: 100%; }
-
 
