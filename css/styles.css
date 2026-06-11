@@ -784,3 +784,76 @@ canvas { display: block; width: 100% !important; height: auto !important; }
 }
 
 
+/* =====================================================
+   KPI executive visual and layout tokens
+   Added: redesign KPIs look, spacing tokens and grid layout for executive dashboard
+===================================================== */
+:root {
+  --gap: 24px;
+  --space-lg: 32px;
+  --card-radius: 12px;
+  --panel-min-h: 220px;
+  --container-max: 1200px;
+  --kpi-icon-size: 48px;
+}
+
+/* Container (optional - no wrapper added to HTML; keeps centered if wrapper later added) */
+.app-container { max-width: var(--container-max); margin: 0 auto; padding: var(--space-lg); }
+
+/* Layout: Power BI like columns */
+.dashboard-grid {
+  gap: var(--gap);
+  grid-template-columns: 280px 1fr 420px;
+  grid-auto-rows: minmax(var(--panel-min-h), auto);
+}
+
+/* KPI cards - executive style but preserving existing IDs and structure */
+.kpi-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--card-radius);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 110px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.kpi-card.primary { background: linear-gradient(180deg,#12223a,#0f1b2e); }
+
+.kpi-card .kpi-label { font-size: 12px; color: var(--text-secondary); }
+.kpi-card .kpi-value { font-size: 34px; font-weight: 800; color: white; line-height: 1; }
+.kpi-card .kpi-value small, .kpi-card .kpi-value .unit { font-size: 14px; font-weight:700; margin-left:6px; opacity:0.9; }
+
+/* status pill to the right */
+.kpi-card .kpi-status { display: inline-block; padding: 6px 10px; border-radius: 999px; font-weight:700; font-size:12px; margin-top:6px; width: max-content; }
+.kpi-card .kpi-status.warning { background: var(--yellow); color: black; }
+.kpi-card .kpi-status.success { background: var(--green); color: black; }
+.kpi-card .kpi-status.danger { background: var(--red); color: white; }
+
+/* make the status pill align to the end */
+.kpi-card .kpi-pill { margin-top: auto; align-self: flex-start; }
+.kpi-card .kpi-pill--right { margin-left: auto; }
+
+/* compact info block text */
+.kpi-card .kpi-sub { font-size: 12px; color: var(--text-secondary); }
+
+/* ensure panels have breathing room */
+.panel { padding: 20px; }
+.chart-panel { min-height: 320px; display:flex; align-items:center; justify-content:center; }
+
+/* Responsive adjustments keep behaviour consistent */
+@media (max-width: 1200px) {
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .chart-panel { min-height: 260px; }
+}
+
+@media (max-width: 768px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .chart-panel { min-height: 240px; }
+  .kpi-card { min-height: 90px; padding:14px; }
+}
+
+/* Small helper to keep KPI numeric elements aligned */
+.kpi-card .kpi-row { display:flex; align-items:center; gap:12px; }
