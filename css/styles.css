@@ -1,4 +1,4 @@
-/* =====================================================
+﻿/* =====================================================
    CONTROL TOWER DE REPUESTOS
    Excel Premium Theme
 ===================================================== */
@@ -461,13 +461,9 @@ body {
    CHARTS
 ===================================================== */
 
-canvas {
+.chart-panel { position: relative; min-height: 260px; }
 
-    width:100% !important;
-
-    height:340px !important;
-
-}
+canvas { display: block; width: 100% !important; height: auto !important; }
 
 /* =====================================================
    COMING SOON
@@ -569,11 +565,9 @@ canvas {
 
     }
 
-    canvas{
+    .chart-panel { position: relative; min-height: 260px; }
 
-        height:260px !important;
-
-    }
+canvas { display: block; width: 100% !important; height: auto !important; }
 
 }
 .analisis-container{
@@ -788,4 +782,5 @@ canvas {
     margin:15px 0;
 
 }
+
 

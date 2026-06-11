@@ -3,7 +3,6 @@
    Exporta window.ChartConfig con paleta y funciones para construir opciones.
 */
 (function(){
-
   const palette = {
     primary: "#4da3ff",
     danger: "#ef4444",
@@ -15,12 +14,14 @@
 
   const defaults = {
     responsive: true,
-    maintainAspectRatio: false,
+    // Prefer preserving aspect ratio by default; per-chart overrides handled by factory.
+    maintainAspectRatio: true,
+    aspectRatio: 1.6, // sensible default for bar/line/mixed charts
+    interaction: { mode: 'nearest', intersect: true },
     plugins: {
-      legend: {
-        labels: { color: "white" }
-      },
+      legend: { labels: { color: "white" } },
       tooltip: {
+        position: 'nearest',
         titleColor: "white",
         bodyColor: "white",
         backgroundColor: "rgba(0,0,0,0.8)"
@@ -63,6 +64,32 @@
       return mergeDeep(base, overrides);
     }
     return base;
+  }
+
+  // If Chart.js is present, set global defaults per-type and register a small plugin to force resize after init
+  if(window.Chart){
+    try{
+      Chart.defaults.responsive = true;
+      Chart.defaults.maintainAspectRatio = true;
+      Chart.defaults.aspectRatio = 1.6;
+      // per-type aspect ratios
+      if(Chart.defaults.doughnut) Chart.defaults.doughnut.aspectRatio = 1;
+      if(Chart.defaults.pie) Chart.defaults.pie.aspectRatio = 1;
+      if(Chart.defaults.bar) Chart.defaults.bar.aspectRatio = 1.6;
+      if(Chart.defaults.line) Chart.defaults.line.aspectRatio = 1.6;
+
+      // plugin to ensure charts recalc pixel size after initialization
+      const forceResizePlugin = {
+        id: 'forceResizeAfterInit',
+        afterInit: function(chart){
+          requestAnimationFrame(()=>{
+            try{ chart.resize(); }catch(e){/* ignore */}
+          });
+        }
+      };
+
+      Chart.register(forceResizePlugin);
+    }catch(e){ console.warn('ChartConfig: could not set global Chart defaults', e); }
   }
 
   // Exponer en el scope global para uso inmediato sin sistema de módulos

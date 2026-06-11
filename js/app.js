@@ -1,4 +1,4 @@
-/* =====================================================
+﻿/* =====================================================
    CONTROL TOWER DE REPUESTOS
    app.js
 ===================================================== */
@@ -264,7 +264,7 @@ function crearPieRotacion() {
 
                     responsive:true,
 
-                    maintainAspectRatio:false
+                    maintainAspectRatio:true
 
                 }
 
@@ -335,7 +335,7 @@ function crearInventario() {
 
                     responsive:true,
 
-                    maintainAspectRatio:false
+                    maintainAspectRatio:true
 
                 }
 
@@ -402,7 +402,7 @@ function crearAntiguedadUso() {
 
                     responsive:true,
 
-                    maintainAspectRatio:false
+                    maintainAspectRatio:true
 
                 }
 
@@ -473,7 +473,7 @@ function crearAntiguedadGTQ() {
 
                     responsive:true,
 
-                    maintainAspectRatio:false
+                    maintainAspectRatio:true
 
                 }
 
@@ -1227,7 +1227,7 @@ function crearParetoInventario(){
 
                     responsive:true,
 
-                    maintainAspectRatio:false,
+                    maintainAspectRatio:true,
 
                     plugins:{
 
@@ -1613,4 +1613,5 @@ function cargarTopObsolescencia(
         .innerHTML = html;
 
 }
+
 
