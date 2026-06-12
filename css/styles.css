@@ -566,7 +566,7 @@ canvas {
 
     canvas{
 
-        height:260px !important;
+        
 
     }
 
@@ -789,4 +789,10 @@ canvas {
 
 /* Chart sizing helpers */
 .chart-panel { display: flex; align-items: center; justify-content: center; overflow: visible !important; }
+
+
+/* Chart inner container to let canvas fill available space */
+.chart-panel .chart-inner { width: 100%; height: 100%; padding: var(--card-padding); box-sizing: border-box; display:flex; align-items:center; justify-content:center; }
+.chart-panel canvas { max-width:100% !important; width:100% !important; height:auto !important; display:block !important; }
+.chart-panel .chart-inner canvas { max-height: calc(100% - 24px); }
 
