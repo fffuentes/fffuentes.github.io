@@ -784,3 +784,9 @@ canvas {
 
 }
 
+
+.chart-panel canvas { width: 100% !important; height: auto !important; display: block; }
+
+/* Chart sizing helpers */
+.chart-panel { display: flex; align-items: center; justify-content: center; overflow: visible !important; }
+
