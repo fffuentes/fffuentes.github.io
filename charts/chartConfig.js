@@ -32,3 +32,29 @@ if(window.Chart){
 }
 
 
+
+// === Chart constructor wrapper to force canvas sizing ===
+(function(){
+  if(!window.Chart) return;
+  try{
+    const OriginalChart = window.Chart;
+    function ChartWrapper(el, config){
+      try{
+        var canvas = (el && el.canvas) ? el.canvas : (typeof el === 'string' ? document.getElementById(el) : el);
+        if(canvas && canvas.parentElement){
+          var parentH = canvas.parentElement.clientHeight || canvas.parentElement.getBoundingClientRect().height;
+          if(parentH && (!canvas.style.height || canvas.style.height === '')){
+            canvas.style.height = parentH + 'px';
+          }
+        }
+      }catch(e){}
+      const instance = new OriginalChart(el, config);
+      try{ instance.resize(); }catch(e){}
+      setTimeout(()=>{ try{ instance.resize(); }catch(e){} }, 120);
+      return instance;
+    }
+    Object.keys(OriginalChart).forEach(k=>{ try{ ChartWrapper[k]=OriginalChart[k]; }catch(e){} });
+    ChartWrapper.prototype = OriginalChart.prototype;
+    window.Chart = ChartWrapper;
+  }catch(e){ console.warn('Chart wrapper install failed', e); }
+})();
