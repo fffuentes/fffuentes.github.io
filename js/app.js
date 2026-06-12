@@ -1879,3 +1879,16 @@ function cargarTopObsolescencia(
 
 }
 
+
+// Ensure canvases are wrapped by .chart-inner to apply sizing helpers
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('.chart-panel').forEach(function(panel){
+    var canvas = panel.querySelector('canvas');
+    if(canvas && !panel.querySelector('.chart-inner')){
+      var wrapper = document.createElement('div');
+      wrapper.className = 'chart-inner';
+      canvas.parentNode.insertBefore(wrapper, canvas);
+      wrapper.appendChild(canvas);
+    }
+  });
+});
