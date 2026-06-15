@@ -23,7 +23,7 @@ if(window.Chart){
     const __forceResizePlugin = {
       id: 'forceResizeAfterInit',
       afterInit: function(chart){
-        try{ chart.resize(); }catch(e){}
+        // delayed resize only to avoid immediate layout thrash
         setTimeout(()=>{ try{ chart.resize(); }catch(e){} }, 80);
       }
     };
@@ -43,14 +43,17 @@ if(window.Chart){
         var canvas = (el && el.canvas) ? el.canvas : (typeof el === 'string' ? document.getElementById(el) : el);
         if(canvas && canvas.parentElement){
           var parentH = canvas.parentElement.clientHeight || canvas.parentElement.getBoundingClientRect().height;
-          if(parentH && (!canvas.style.height || canvas.style.height === '')){
-            canvas.style.height = parentH + 'px';
-          }
+          try{
+            var current = canvas.clientHeight || (canvas.style && parseInt(canvas.style.height)||0);
+            if(parentH && Math.abs(current - parentH) > 4){
+              canvas.style.height = parentH + 'px';
+            }
+          }catch(e){}
         }
       }catch(e){}
       const instance = new OriginalChart(el, config);
-      try{ instance.resize(); }catch(e){}
-      setTimeout(()=>{ try{ instance.resize(); }catch(e){} }, 120);
+      // single delayed resize to allow layout to settle; avoid immediate double-resize which can trigger layout loops
+      setTimeout(()=>{ try{ instance.resize(); }catch(e){} }, 80);
 
       // Build a compact series summary above the canvas using chart data
       try{
