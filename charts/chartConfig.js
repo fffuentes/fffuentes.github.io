@@ -41,15 +41,11 @@ if(window.Chart){
     function ChartWrapper(el, config){
       try{
         var canvas = (el && el.canvas) ? el.canvas : (typeof el === 'string' ? document.getElementById(el) : el);
-        if(canvas && canvas.parentElement){
-          var parentH = canvas.parentElement.clientHeight || canvas.parentElement.getBoundingClientRect().height;
-          try{
-            var current = canvas.clientHeight || (canvas.style && parseInt(canvas.style.height)||0);
-            if(parentH && Math.abs(current - parentH) > 4){
-              canvas.style.height = parentH + 'px';
-            }
-          }catch(e){}
-        }
+        // Do not set canvas.style.height here — rely on CSS (.chart-inner) and Chart.js resizing.
+        // Setting style.height in response to dynamic measurements caused resize loops when browser zoom changed.
+        // Keep layout-controlled sizing (min-height on panel) and trigger chart.resize() on DPR/resize events instead.
+        
+        
       }catch(e){}
       const instance = new OriginalChart(el, config);
       // single delayed resize to allow layout to settle; avoid immediate double-resize which can trigger layout loops
@@ -135,4 +131,27 @@ if(window.Chart){
     ChartWrapper.prototype = OriginalChart.prototype;
     window.Chart = ChartWrapper;
   }catch(e){ console.warn('Chart wrapper install failed', e); }
+})();
+// Detect browser zoom (devicePixelRatio changes) and trigger a single resize for all charts
+(function(){
+  let lastDPR = window.devicePixelRatio;
+  function triggerResizeAll(){
+    try{
+      document.querySelectorAll('canvas').forEach(c=>{
+        try{
+          const inst = (window.Chart && typeof Chart.getChart === "function") ? Chart.getChart(c) : null;
+          if(inst && typeof inst.resize === "function") inst.resize();
+        }catch(e){}
+      });
+    }catch(e){}
+  }
+  setInterval(()=> {
+    const dpr = window.devicePixelRatio;
+    if(dpr !== lastDPR){
+      lastDPR = dpr;
+      setTimeout(triggerResizeAll, 60);
+    }
+  }, 250);
+  // also ensure resize on window resize
+  window.addEventListener('resize', ()=>{ setTimeout(triggerResizeAll,80); });
 })();
