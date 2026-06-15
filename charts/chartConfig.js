@@ -127,41 +127,33 @@ if(window.Chart){
         }
       }catch(e){/* non-critical */}
 
-      // Attach ResizeObserver to the chart's panel to trigger resize only when panel actually changes
+      // Use simpler approach: window resize + IntersectionObserver on panel to trigger chart resize when visible
       try{
         var resizeContainer = c && c.closest ? (c.closest('.chart-panel') || c.closest('.chart-inner') || c.parentElement) : (c ? c.parentElement : null);
-        if(window.ResizeObserver && resizeContainer){
-          (function(inst, container){
-            var timer = null;
-            var ro = new ResizeObserver(function(entries){
-              try{
-                if(!container) return;
-                if(container.clientHeight && container.clientHeight > 5000) return; // ignore runaway sizes
-              }catch(e){}
-              clearTimeout(timer);
-              timer = setTimeout(function(){
-                try{
-                  // ignore observer events caused by our own programmatic resize within short window
-                  if(inst && inst.__lastProgrammaticResize && (Date.now() - inst.__lastProgrammaticResize) < 300) return;
-                  if(inst && typeof inst.resize === 'function'){
-                    inst.__lastProgrammaticResize = Date.now();
-                    inst.resize();
-                  }
-                }catch(e){}
-              }, 120);
-            });
-            try{ ro.observe(container); }catch(e){}
-            inst.__ro = ro;
-            // patch destroy to disconnect observer
+        (function(inst, container){
+          function doResize(){ try{ inst.__lastProgrammaticResize = Date.now(); if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){} }
+          function debounced(){ clearTimeout(inst.__resizeTimer); inst.__resizeTimer = setTimeout(doResize, 120); }
+          // window resize
+          try{ window.addEventListener('resize', debounced); inst.__resizeHandler = debounced; }catch(e){}
+          // intersection to resize when panel becomes visible
+          if(window.IntersectionObserver && container){
             try{
-              var origDestroy = inst.destroy && inst.destroy.bind(inst);
-              inst.destroy = function(){
-                try{ if(inst.__ro){ inst.__ro.disconnect(); inst.__ro = null; } }catch(e){}
-                if(origDestroy) origDestroy();
-              };
+              var io = new IntersectionObserver(function(entries){
+                entries.forEach(function(en){ if(en.isIntersecting) debounced(); });
+              }, { threshold: 0.25 });
+              io.observe(container);
+              inst.__io = io;
             }catch(e){}
-          })(instance, resizeContainer);
-        }
+          }
+          // patch destroy
+          try{
+            var origDestroy = inst.destroy && inst.destroy.bind(inst);
+            inst.destroy = function(){
+              try{ window.removeEventListener('resize', inst.__resizeHandler); if(inst.__io){ inst.__io.disconnect(); inst.__io = null; } }catch(e){}
+              if(origDestroy) origDestroy();
+            };
+          }catch(e){}
+        })(instance, resizeContainer);
       }catch(e){}
 
       return instance;
