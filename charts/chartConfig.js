@@ -125,6 +125,30 @@ if(window.Chart){
         }
       }catch(e){/* non-critical */}
 
+      // Attach ResizeObserver to the chart's container to trigger resize only when container actually changes
+      try{
+        var resizeContainer = c && c.closest ? (c.closest('.chart-inner') || c.parentElement) : (c ? c.parentElement : null);
+        if(window.ResizeObserver && resizeContainer){
+          (function(inst, container){
+            var timer = null;
+            var ro = new ResizeObserver(function(entries){
+              clearTimeout(timer);
+              timer = setTimeout(function(){ try{ if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){} }, 100);
+            });
+            try{ ro.observe(container); }catch(e){}
+            inst.__ro = ro;
+            // patch destroy to disconnect observer
+            try{
+              var origDestroy = inst.destroy && inst.destroy.bind(inst);
+              inst.destroy = function(){
+                try{ if(inst.__ro){ inst.__ro.disconnect(); inst.__ro = null; } }catch(e){}
+                if(origDestroy) origDestroy();
+              };
+            }catch(e){}
+          })(instance, resizeContainer);
+        }
+      }catch(e){}
+
       return instance;
     }
     Object.keys(OriginalChart).forEach(k=>{ try{ ChartWrapper[k]=OriginalChart[k]; }catch(e){} });
@@ -132,26 +156,4 @@ if(window.Chart){
     window.Chart = ChartWrapper;
   }catch(e){ console.warn('Chart wrapper install failed', e); }
 })();
-// Detect browser zoom (devicePixelRatio changes) and trigger a single resize for all charts
-(function(){
-  let lastDPR = window.devicePixelRatio;
-  function triggerResizeAll(){
-    try{
-      document.querySelectorAll('canvas').forEach(c=>{
-        try{
-          const inst = (window.Chart && typeof Chart.getChart === "function") ? Chart.getChart(c) : null;
-          if(inst && typeof inst.resize === "function") inst.resize();
-        }catch(e){}
-      });
-    }catch(e){}
-  }
-  setInterval(()=> {
-    const dpr = window.devicePixelRatio;
-    if(dpr !== lastDPR){
-      lastDPR = dpr;
-      setTimeout(triggerResizeAll, 60);
-    }
-  }, 250);
-  // also ensure resize on window resize
-  window.addEventListener('resize', ()=>{ setTimeout(triggerResizeAll,80); });
-})();
+
