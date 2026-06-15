@@ -62,23 +62,27 @@ if(window.Chart){
           if(!series){
             series = document.createElement('div');
             series.className = 'chart-series';
-            // insert series after chart container so it appears below the chart
-            try {
-              const container = parent;
-              const containerParent = container && container.parentElement ? container.parentElement : null;
-              if (containerParent) {
-                containerParent.insertBefore(series, container.nextSibling);
-              } else if (container) {
-                container.appendChild(series);
-              } else {
-                document.body.appendChild(series);
-              }
-            } catch(e) {
-              parent.insertBefore(series, c);
-            }
+            // create empty, will ensure correct placement below
+            parent.appendChild(series);
           } else {
             series.innerHTML = '';
           }
+          // Ensure series is placed after the chart container (so it appears below the chart)
+          try {
+            const container = parent;
+            const containerParent = container && container.parentElement ? container.parentElement : null;
+            if (containerParent) {
+              // move series to after the container
+              if (container.nextSibling) containerParent.insertBefore(series, container.nextSibling);
+              else containerParent.appendChild(series);
+            } else if (container) {
+              if (container.lastChild !== series) container.appendChild(series);
+            } else {
+              if (!document.body.contains(series)) document.body.appendChild(series);
+            }
+          } catch(e) {}
+          
+          
           const labels = data.labels;
           const ds = (data.datasets && data.datasets[0]) ? data.datasets[0] : null;
           const values = ds ? (ds.data || []) : [];
