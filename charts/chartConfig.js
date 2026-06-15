@@ -51,6 +51,64 @@ if(window.Chart){
       const instance = new OriginalChart(el, config);
       try{ instance.resize(); }catch(e){}
       setTimeout(()=>{ try{ instance.resize(); }catch(e){} }, 120);
+
+      // Build a compact series summary above the canvas using chart data
+      try{
+        const c = (instance && instance.canvas) ? instance.canvas : ((typeof el === 'string') ? document.getElementById(el) : el);
+        const data = (config && config.data) ? config.data : (instance && instance.data) ? instance.data : null;
+        const parent = c && c.closest ? (c.closest('.chart-inner') || c.parentElement) : (c ? c.parentElement : null);
+        if(parent && data && Array.isArray(data.labels) && data.labels.length){
+          let series = parent.querySelector('.chart-series');
+          if(!series){
+            series = document.createElement('div');
+            series.className = 'chart-series';
+            parent.insertBefore(series, c);
+          } else {
+            series.innerHTML = '';
+          }
+          const labels = data.labels;
+          const ds = (data.datasets && data.datasets[0]) ? data.datasets[0] : null;
+          const values = ds ? (ds.data || []) : [];
+          const colors = ds ? (ds.backgroundColor || []) : [];
+          const type = (config && config.type) || (instance && instance.config && instance.config.type) || '';
+          let total = 0;
+          if(type === 'doughnut' || type === 'pie'){
+            total = values.reduce((a,b)=>a+(+b||0),0);
+          }
+          labels.forEach(function(label, i){
+            try{
+              const val = values[i] || 0;
+              const color = colors[i] || (ds && ds.borderColor && ds.borderColor[i]) || 'transparent';
+              const item = document.createElement('div');
+              item.className = 'series-item';
+
+              const sw = document.createElement('span');
+              sw.className = 'series-swatch';
+              sw.style.background = color;
+
+              const lab = document.createElement('span');
+              lab.className = 'series-label';
+              lab.textContent = label;
+
+              const valEl = document.createElement('span');
+              valEl.className = 'series-value';
+              if(type === 'doughnut' || type === 'pie'){
+                const pct = total ? ((val/total)*100).toFixed(1) + '%' : '0%';
+                valEl.textContent = `${pct} (${(val||0).toLocaleString()})`;
+              } else {
+                valEl.textContent = (val||0).toLocaleString();
+              }
+
+              item.appendChild(sw);
+              item.appendChild(lab);
+              item.appendChild(valEl);
+
+              series.appendChild(item);
+            }catch(e){}
+          });
+        }
+      }catch(e){/* non-critical */}
+
       return instance;
     }
     Object.keys(OriginalChart).forEach(k=>{ try{ ChartWrapper[k]=OriginalChart[k]; }catch(e){} });

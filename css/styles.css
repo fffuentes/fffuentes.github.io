@@ -790,6 +790,45 @@ canvas {
 /* Chart sizing helpers */
 .chart-panel { display: flex; align-items: center; justify-content: center; overflow: visible !important; }
 
+/* Series summary displayed above charts (label + value) */
+.chart-series {
+    display:flex;
+    gap:14px;
+    padding:10px 12px;
+    background: rgba(0,0,0,0.22);
+    border-radius:10px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:flex-start;
+}
+.chart-series .series-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:84px;
+    color:var(--text-secondary);
+    text-align:center;
+}
+.chart-series .series-swatch{
+    width:28px;
+    height:12px;
+    border-radius:4px;
+    display:block;
+    margin-bottom:6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.chart-series .series-label{
+    font-size:0.85rem;
+    color:var(--text-secondary);
+}
+.chart-series .series-value{
+    font-weight:700;
+    color:var(--text-main);
+    margin-top:6px;
+}
+
+
 
 /* Chart inner container to let canvas fill available space */
 .chart-panel .chart-inner { width: 100%; height: 100%; padding: var(--card-padding); box-sizing: border-box; display:flex; align-items:center; justify-content:center; }
