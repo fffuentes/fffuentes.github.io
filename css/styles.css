@@ -785,7 +785,7 @@ canvas {
 }
 
 
-.chart-panel canvas { width: 100% !important; height: auto !important; display: block; }
+.chart-panel canvas { width: 100% !important; height: auto !important; display: block; max-height: 2000px !important; }
 
 /* Chart sizing helpers */
 .chart-panel { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; overflow: visible !important; }

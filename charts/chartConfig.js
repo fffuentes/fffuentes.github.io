@@ -47,6 +47,8 @@ if(window.Chart){
         
         
       }catch(e){}
+      // clean inline sizing left by earlier runs
+      try{ if (canvas) { canvas.style.removeProperty('height'); canvas.style.removeProperty('width'); canvas.removeAttribute('height'); canvas.removeAttribute('width'); } }catch(e){}
       const instance = new OriginalChart(el, config);
       // single delayed resize to allow layout to settle; set a flag to avoid triggering the ResizeObserver loop
       setTimeout(()=>{ try{ instance.__lastProgrammaticResize = Date.now(); instance.resize(); }catch(e){} }, 80);
@@ -132,6 +134,10 @@ if(window.Chart){
           (function(inst, container){
             var timer = null;
             var ro = new ResizeObserver(function(entries){
+              try{
+                if(!container) return;
+                if(container.clientHeight && container.clientHeight > 5000) return; // ignore runaway sizes
+              }catch(e){}
               clearTimeout(timer);
               timer = setTimeout(function(){
                 try{
