@@ -980,6 +980,14 @@ function crearAntiguedadUsoMRP(){
             "chartMRPAntiguedadUso"
         );
 
+    // Ensure panel has a minimum height so chart can size correctly
+    try{
+        const panel = ctx && ctx.closest ? ctx.closest('.chart-panel') : null;
+        if(panel && (!panel.style.minHeight || panel.style.minHeight === '')){
+            panel.style.minHeight = '220px';
+        }
+    }catch(e){}
+
     charts.mrpAntiguedadUso =
         new Chart(
             ctx,
@@ -991,10 +999,10 @@ function crearAntiguedadUsoMRP(){
 
                     labels:[
 
-                        "<1 aÃ±o",
-                        "1-3 aÃ±os",
-                        "3-5 aÃ±os",
-                        ">5 aÃ±os"
+                        "<1 año",
+                        "1-3 años",
+                        "3-5 años",
+                        ">5 años"
 
                     ],
 
@@ -1029,6 +1037,10 @@ function crearAntiguedadUsoMRP(){
             }
         );
 
+    // Force resize immediately and after a short delay to handle hidden/tabbed containers
+    try{ const inst = (window.Chart && typeof Chart.getChart === 'function') ? Chart.getChart(ctx) : null; if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){}
+    setTimeout(()=>{ try{ const inst = (window.Chart && typeof Chart.getChart === 'function') ? Chart.getChart(ctx) : null; if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){} }, 120);
+
 }
 function crearAntiguedadGTQMRP(){
 
@@ -1036,6 +1048,14 @@ function crearAntiguedadGTQMRP(){
         document.getElementById(
             "chartMRPAntiguedadGTQ"
         );
+
+    // Ensure panel has a minimum height so chart can size correctly
+    try{
+        const panel = ctx && ctx.closest ? ctx.closest('.chart-panel') : null;
+        if(panel && (!panel.style.minHeight || panel.style.minHeight === '')){
+            panel.style.minHeight = '220px';
+        }
+    }catch(e){}
 
     charts.mrpAntiguedadGTQ =
         new Chart(
@@ -1048,10 +1068,10 @@ function crearAntiguedadGTQMRP(){
 
                     labels:[
 
-                        "<1 aÃ±o",
-                        "1-3 aÃ±os",
-                        "3-5 aÃ±os",
-                        ">5 aÃ±os"
+                        "<1 año",
+                        "1-3 años",
+                        "3-5 años",
+                        ">5 años"
 
                     ],
 
@@ -1087,6 +1107,10 @@ function crearAntiguedadGTQMRP(){
 
             }
         );
+
+    // Force resize immediately and after a short delay to handle hidden/tabbed containers
+    try{ const inst = (window.Chart && typeof Chart.getChart === 'function') ? Chart.getChart(ctx) : null; if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){}
+    setTimeout(()=>{ try{ const inst = (window.Chart && typeof Chart.getChart === 'function') ? Chart.getChart(ctx) : null; if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){} }, 120);
 
 }
 function cargarAnalisisSKU(){
@@ -1910,3 +1934,4 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   });
 });
+
