@@ -788,7 +788,10 @@ canvas {
 .chart-panel canvas { width: 100% !important; height: auto !important; display: block; }
 
 /* Chart sizing helpers */
-.chart-panel { display: flex; align-items: center; justify-content: center; overflow: visible !important; }
+.chart-panel { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; overflow: visible !important; }
+.chart-panel .panel-title { align-self: flex-start; margin-bottom: 8px; }
+.chart-panel .chart-inner { width:100%; display:flex; align-items:center; justify-content:center; }
+
 
 /* Series summary displayed above charts (label + value) */
 .chart-series {
