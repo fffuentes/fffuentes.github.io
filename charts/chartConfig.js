@@ -24,7 +24,7 @@ if(window.Chart){
       id: 'forceResizeAfterInit',
       afterInit: function(chart){
         // delayed resize only to avoid immediate layout thrash
-        setTimeout(()=>{ try{ chart.resize(); }catch(e){} }, 80);
+        setTimeout(()=>{ try{ chart.__lastProgrammaticResize = Date.now(); chart.resize(); }catch(e){} }, 80);
       }
     };
     try{ Chart.register(__forceResizePlugin); }catch(e){/* Chart may auto-register in older versions */}
@@ -48,8 +48,8 @@ if(window.Chart){
         
       }catch(e){}
       const instance = new OriginalChart(el, config);
-      // single delayed resize to allow layout to settle; avoid immediate double-resize which can trigger layout loops
-      setTimeout(()=>{ try{ instance.resize(); }catch(e){} }, 80);
+      // single delayed resize to allow layout to settle; set a flag to avoid triggering the ResizeObserver loop
+      setTimeout(()=>{ try{ instance.__lastProgrammaticResize = Date.now(); instance.resize(); }catch(e){} }, 80);
 
       // Build a compact series summary above the canvas using chart data
       try{
@@ -125,15 +125,24 @@ if(window.Chart){
         }
       }catch(e){/* non-critical */}
 
-      // Attach ResizeObserver to the chart's container to trigger resize only when container actually changes
+      // Attach ResizeObserver to the chart's panel to trigger resize only when panel actually changes
       try{
-        var resizeContainer = c && c.closest ? (c.closest('.chart-inner') || c.parentElement) : (c ? c.parentElement : null);
+        var resizeContainer = c && c.closest ? (c.closest('.chart-panel') || c.closest('.chart-inner') || c.parentElement) : (c ? c.parentElement : null);
         if(window.ResizeObserver && resizeContainer){
           (function(inst, container){
             var timer = null;
             var ro = new ResizeObserver(function(entries){
               clearTimeout(timer);
-              timer = setTimeout(function(){ try{ if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){} }, 100);
+              timer = setTimeout(function(){
+                try{
+                  // ignore observer events caused by our own programmatic resize within short window
+                  if(inst && inst.__lastProgrammaticResize && (Date.now() - inst.__lastProgrammaticResize) < 300) return;
+                  if(inst && typeof inst.resize === 'function'){
+                    inst.__lastProgrammaticResize = Date.now();
+                    inst.resize();
+                  }
+                }catch(e){}
+              }, 120);
             });
             try{ ro.observe(container); }catch(e){}
             inst.__ro = ro;
