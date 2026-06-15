@@ -62,7 +62,20 @@ if(window.Chart){
           if(!series){
             series = document.createElement('div');
             series.className = 'chart-series';
-            parent.insertBefore(series, c);
+            // insert series after chart container so it appears below the chart
+            try {
+              const container = parent;
+              const containerParent = container && container.parentElement ? container.parentElement : null;
+              if (containerParent) {
+                containerParent.insertBefore(series, container.nextSibling);
+              } else if (container) {
+                container.appendChild(series);
+              } else {
+                document.body.appendChild(series);
+              }
+            } catch(e) {
+              parent.insertBefore(series, c);
+            }
           } else {
             series.innerHTML = '';
           }
