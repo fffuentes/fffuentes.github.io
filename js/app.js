@@ -65,6 +65,24 @@ function iniciarTabs() {
                     .getElementById(destino)
                     .classList.add("active");
 
+                // Trigger resize for canvases in the activated tab (fix hidden-tab rendering)
+                setTimeout(() => {
+                    try {
+                        const container = document.getElementById(destino);
+                        if (container) {
+                            container.querySelectorAll('canvas').forEach(c => {
+                                try {
+                                    if (window.Chart && typeof Chart.getChart === 'function') {
+                                        const inst = Chart.getChart(c);
+                                        if (inst && typeof inst.resize === 'function') inst.resize();
+                                    }
+                                } catch (e) {}
+                            });
+                        }
+                    } catch (e) {}
+                    try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+                }, 80);
+
             }
         );
 
