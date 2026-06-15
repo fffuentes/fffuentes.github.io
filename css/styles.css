@@ -849,9 +849,15 @@ canvas {
   padding:10px 12px;
   background: rgba(0,0,0,0.22);
   border-radius:10px;
-  margin-bottom:12px;
+  margin-top:12px;
+  margin-bottom:0;
+  width:100%;
+  box-sizing:border-box;
 }
-.chart-series .series-list{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+/* ensure series appear below the chart and span full panel width */
+.chart-panel > .chart-series{ order:2; }
+.chart-panel .chart-inner{ order:1; width:100%; }
+.chart-series .series-list{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
 .chart-series .series-item{ display:flex; flex-direction:column; align-items:center; min-width:84px; color:var(--text-secondary); text-align:center; }
 .chart-series .series-swatch{ width:28px; height:12px; border-radius:4px; display:block; margin-bottom:6px; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
 .chart-series .series-label{ font-size:0.85rem; color:var(--text-secondary); }
