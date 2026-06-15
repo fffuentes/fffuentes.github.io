@@ -1935,3 +1935,46 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 
+
+
+// Enhance chart-series: wrap items into .series-list and append .series-total with computed total
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.chart-series').forEach(function(series){
+      try{
+        if(series.querySelector('.series-list')) return; // already transformed
+        var items = Array.from(series.querySelectorAll('.series-item'));
+        if(items.length===0) return;
+        var list = document.createElement('div');
+        list.className = 'series-list';
+        items.forEach(function(it){ list.appendChild(it); });
+        // compute numeric total (prefer value inside parentheses)
+        var total = 0;
+        items.forEach(function(it){
+          try{
+            var vText = (it.querySelector('.series-value') && it.querySelector('.series-value').textContent) || '';
+            var m = vText.match(/\(([^)]+)\)/); // number inside ()
+            var num = 0;
+            if(m && m[1]){
+              num = parseInt(m[1].replace(/,/g,'')) || 0;
+            } else {
+              // fallback: extract digits
+              var n = (vText || '').replace(/[^0-9.-]+/g,'');
+              num = parseFloat(n) || 0;
+            }
+            total += num;
+          }catch(e){}
+        });
+        var totalBox = document.createElement('div');
+        totalBox.className = 'series-total';
+        var lbl = document.createElement('div'); lbl.className='total-label'; lbl.textContent='Total';
+        var val = document.createElement('div'); val.className='total-value'; val.textContent = total.toLocaleString();
+        totalBox.appendChild(lbl); totalBox.appendChild(val);
+        // clear and append
+        series.innerHTML = '';
+        series.appendChild(list);
+        series.appendChild(totalBox);
+      }catch(e){}
+    });
+  });
+})();
