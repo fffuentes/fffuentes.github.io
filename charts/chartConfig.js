@@ -19,13 +19,10 @@ if(window.Chart){
     Chart.defaults.plugins.legend = Chart.defaults.plugins.legend || {};
     Chart.defaults.plugins.legend.position = Chart.defaults.plugins.legend.position || 'bottom';
 
-    // small plugin to ensure charts recalc pixel size after init
+    // small plugin disabled to avoid automatic resizing on init
     const __forceResizePlugin = {
       id: 'forceResizeAfterInit',
-      afterInit: function(chart){
-        // delayed resize only to avoid immediate layout thrash
-        setTimeout(()=>{ try{ chart.__lastProgrammaticResize = Date.now(); chart.resize(); }catch(e){} }, 80);
-      }
+      afterInit: function(chart){ /* automatic resize disabled */ }
     };
     try{ Chart.register(__forceResizePlugin); }catch(e){/* Chart may auto-register in older versions */}
   }catch(e){ console.warn('chartConfig sizing defaults failed', e); }
@@ -50,8 +47,8 @@ if(window.Chart){
       // clean inline sizing left by earlier runs
       try{ if (canvas) { canvas.style.removeProperty('height'); canvas.style.removeProperty('width'); canvas.removeAttribute('height'); canvas.removeAttribute('width'); } }catch(e){}
       const instance = new OriginalChart(el, config);
-      // single delayed resize to allow layout to settle; set a flag to avoid triggering the ResizeObserver loop
-      setTimeout(()=>{ try{ instance.__lastProgrammaticResize = Date.now(); instance.resize(); }catch(e){} }, 80);
+      // No programmatic resize here. Resizing will be triggered by window resize and tab activation only.
+
 
       // Build a compact series summary above the canvas using chart data
       try{
@@ -127,34 +124,8 @@ if(window.Chart){
         }
       }catch(e){/* non-critical */}
 
-      // Use simpler approach: window resize + IntersectionObserver on panel to trigger chart resize when visible
-      try{
-        var resizeContainer = c && c.closest ? (c.closest('.chart-panel') || c.closest('.chart-inner') || c.parentElement) : (c ? c.parentElement : null);
-        (function(inst, container){
-          function doResize(){ try{ inst.__lastProgrammaticResize = Date.now(); if(inst && typeof inst.resize === 'function') inst.resize(); }catch(e){} }
-          function debounced(){ clearTimeout(inst.__resizeTimer); inst.__resizeTimer = setTimeout(doResize, 120); }
-          // window resize
-          try{ window.addEventListener('resize', debounced); inst.__resizeHandler = debounced; }catch(e){}
-          // intersection to resize when panel becomes visible
-          if(window.IntersectionObserver && container){
-            try{
-              var io = new IntersectionObserver(function(entries){
-                entries.forEach(function(en){ if(en.isIntersecting) debounced(); });
-              }, { threshold: 0.25 });
-              io.observe(container);
-              inst.__io = io;
-            }catch(e){}
-          }
-          // patch destroy
-          try{
-            var origDestroy = inst.destroy && inst.destroy.bind(inst);
-            inst.destroy = function(){
-              try{ window.removeEventListener('resize', inst.__resizeHandler); if(inst.__io){ inst.__io.disconnect(); inst.__io = null; } }catch(e){}
-              if(origDestroy) origDestroy();
-            };
-          }catch(e){}
-        })(instance, resizeContainer);
-      }catch(e){}
+      // Automatic observers disabled here. Resizing is handled by global handlers (window resize and tab activation) to avoid loops.
+      try{ /* no-op: automatic observers removed to prevent resize loops */ }catch(e){}
 
       return instance;
     }
