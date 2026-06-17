@@ -11,6 +11,49 @@ let charts = {};
 
 let dashboardData = {};
 
+// =====================================================
+// RESIZE HANDLER â€” evita loops con zoom
+// =====================================================
+
+let resizeTimeout = null;
+let lastDPR = window.devicePixelRatio || 1;
+
+function resizeAllCharts() {
+    try {
+        Object.values(charts).forEach(chart => {
+            if (chart && typeof chart.resize === 'function') {
+                chart.resize();
+            }
+        });
+    } catch (e) {
+        // silently ignore resize errors
+    }
+}
+
+function handleResize() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        resizeAllCharts();
+    }, 150);
+}
+
+function handleZoomChange() {
+    const currentDPR = window.devicePixelRatio || 1;
+    if (currentDPR !== lastDPR) {
+        lastDPR = currentDPR;
+        // Zoom detectado: doble resize para asegurar redibujo correcto
+        resizeAllCharts();
+        setTimeout(resizeAllCharts, 200);
+    }
+}
+
+// Escuchar resize de ventana (debounced)
+window.addEventListener('resize', handleResize);
+
+// Detectar zoom mediante cambio de devicePixelRatio
+window.matchMedia('(resolution: ' + (window.devicePixelRatio || 1) + 'dppx)')
+    .addEventListener('change', handleZoomChange);
+
 
 // =====================================================
 // INICIO
@@ -162,6 +205,10 @@ async function inicializarDashboard(){
 
     cargarAnalisisSKU();
 
+    // Asegurar que los charts ocupen bien sus contenedores
+    setTimeout(resizeAllCharts, 100);
+    setTimeout(resizeAllCharts, 400);
+
 }
 
 
@@ -187,6 +234,10 @@ async function refrescarDashboard(){
     crearGraficosMRP();
 
     cargarAnalisisSKU();
+
+    // Asegurar que los charts ocupen bien sus contenedores
+    setTimeout(resizeAllCharts, 100);
+    setTimeout(resizeAllCharts, 400);
 
 }
 
@@ -999,10 +1050,10 @@ function crearAntiguedadUsoMRP(){
 
                     labels:[
 
-                        "<1 año",
-                        "1-3 años",
-                        "3-5 años",
-                        ">5 años"
+                        "<1 aï¿½o",
+                        "1-3 aï¿½os",
+                        "3-5 aï¿½os",
+                        ">5 aï¿½os"
 
                     ],
 
@@ -1068,10 +1119,10 @@ function crearAntiguedadGTQMRP(){
 
                     labels:[
 
-                        "<1 año",
-                        "1-3 años",
-                        "3-5 años",
-                        ">5 años"
+                        "<1 aï¿½o",
+                        "1-3 aï¿½os",
+                        "3-5 aï¿½os",
+                        ">5 aï¿½os"
 
                     ],
 
