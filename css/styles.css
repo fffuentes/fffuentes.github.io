@@ -790,22 +790,24 @@ body {
     margin-bottom: 8px;
 }
 
-/* Canvas container — defines the space Chart.js fills */
+/* Canvas container — defines the space Chart.js fills.
+   Using defined height (not min-height) so canvas 100% resolves correctly.
+   Canvas is position:absolute so it CANNOT expand its container — breaks the resize loop. */
 .chart-panel .chart-inner {
     position: relative;
     width: 100%;
-    min-height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 340px;
+    max-height: 70vh;
     box-sizing: border-box;
 }
 
-/* Canvas fills its .chart-inner container */
+/* Canvas fills its .chart-inner container without affecting container size */
 .chart-panel .chart-inner canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100% !important;
     height: 100% !important;
-    display: block !important;
 }
 
 
