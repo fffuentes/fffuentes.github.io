@@ -12,11 +12,11 @@ let charts = {};
 let dashboardData = {};
 
 // =====================================================
-// RESIZE HANDLER — evita loops con zoom
+// RESIZE HANDLER — evita loops, responde a zoom in/out
 // =====================================================
 
 let resizeTimeout = null;
-let lastDPR = window.devicePixelRatio || 1;
+const RESIZE_DEBOUNCE = 100; // ms entre el último evento y el resize
 
 function resizeAllCharts() {
     try {
@@ -30,29 +30,33 @@ function resizeAllCharts() {
     }
 }
 
+// "Leading + trailing" debounce:
+//   - Primer evento → ejecuta inmediatamente
+//   - Eventos subsiguientes → reinician el timer
+//   - Al terminar la ráfaga → ejecuta una última vez
+let lastResizeTime = 0;
 function handleResize() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
+    var now = Date.now();
+    // Leading edge: ejecutar inmediatamente si han pasado >200ms desde el último
+    if (now - lastResizeTime > 200) {
         resizeAllCharts();
-    }, 150);
-}
-
-function handleZoomChange() {
-    const currentDPR = window.devicePixelRatio || 1;
-    if (currentDPR !== lastDPR) {
-        lastDPR = currentDPR;
-        // Zoom detectado: doble resize para asegurar redibujo correcto
-        resizeAllCharts();
-        setTimeout(resizeAllCharts, 200);
     }
+    lastResizeTime = now;
+
+    // Trailing edge: asegurar un resize final tras la ráfaga
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function () {
+        resizeAllCharts();
+    }, RESIZE_DEBOUNCE);
 }
 
-// Escuchar resize de ventana (debounced)
+// window.resize — se dispara con zoom en la mayoría de navegadores
 window.addEventListener('resize', handleResize);
 
-// Detectar zoom mediante cambio de devicePixelRatio
-window.matchMedia('(resolution: ' + (window.devicePixelRatio || 1) + 'dppx)')
-    .addEventListener('change', handleZoomChange);
+// visualViewport.resize — detecta zoom (escala) y cambios de viewport móvil
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', handleResize);
+}
 
 
 // =====================================================
