@@ -26,6 +26,37 @@ if (window.Chart) {
     Chart.defaults.plugins.legend = Chart.defaults.plugins.legend || {};
     Chart.defaults.plugins.legend.position =
       Chart.defaults.plugins.legend.position || 'bottom';
+
+    // --- High-contrast text for dark dashboard theme ---
+    // Global text color (ticks, labels, tooltips, title)
+    Chart.defaults.color = '#FFFFFF';
+
+    // Legend labels: white + semibold
+    Chart.defaults.plugins.legend.labels.color = '#FFFFFF';
+    Chart.defaults.plugins.legend.labels.font =
+      Chart.defaults.plugins.legend.labels.font || {};
+    Chart.defaults.plugins.legend.labels.font.weight = '600';
+
+    // Axis ticks: white semibold (categories) / medium (numeric)
+    Chart.defaults.scales = Chart.defaults.scales || {};
+    if (!Chart.defaults.scales.x) Chart.defaults.scales.x = {};
+    if (!Chart.defaults.scales.x.ticks) Chart.defaults.scales.x.ticks = {};
+    Chart.defaults.scales.x.ticks.font =
+      Chart.defaults.scales.x.ticks.font || {};
+    Chart.defaults.scales.x.ticks.font.weight = '500';
+    if (!Chart.defaults.scales.y) Chart.defaults.scales.y = {};
+    if (!Chart.defaults.scales.y.ticks) Chart.defaults.scales.y.ticks = {};
+    Chart.defaults.scales.y.ticks.font =
+      Chart.defaults.scales.y.ticks.font || {};
+    Chart.defaults.scales.y.ticks.font.weight = '600';
+
+    // Grid lines: subtle, not competing with data
+    Chart.defaults.scales.x.grid =
+      Chart.defaults.scales.x.grid || {};
+    Chart.defaults.scales.x.grid.color = 'rgba(255,255,255,0.08)';
+    Chart.defaults.scales.y.grid =
+      Chart.defaults.scales.y.grid || {};
+    Chart.defaults.scales.y.grid.color = 'rgba(255,255,255,0.08)';
   } catch (e) {
     console.warn('chartConfig defaults failed', e);
   }
