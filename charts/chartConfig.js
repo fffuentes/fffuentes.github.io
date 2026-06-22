@@ -31,11 +31,13 @@ if (window.Chart) {
     // Global text color (ticks, labels, tooltips, title)
     Chart.defaults.color = '#FFFFFF';
 
-    // Legend labels: white + semibold
+    // Legend labels: white + semibold + compact
     Chart.defaults.plugins.legend.labels.color = '#FFFFFF';
     Chart.defaults.plugins.legend.labels.font =
       Chart.defaults.plugins.legend.labels.font || {};
     Chart.defaults.plugins.legend.labels.font.weight = '600';
+    Chart.defaults.plugins.legend.labels.font.size = 11;
+    Chart.defaults.plugins.legend.labels.padding = 6;
 
     // Axis ticks: white semibold (categories) / medium (numeric)
     Chart.defaults.scales = Chart.defaults.scales || {};
