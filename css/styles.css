@@ -813,13 +813,13 @@ body {
 
 
 
-/* Series layout: ultra-compact row below chart — width matches content, centered */
+/* Series layout: compact below chart — centered label over value + thin swatch bar */
 .chart-series{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:6px;
-  padding:4px 8px;
+  padding:5px 10px;
   background: rgba(0,0,0,0.22);
   border-radius:6px;
   margin-top:6px;
@@ -834,11 +834,11 @@ body {
 /* ensure series appear below the chart and span full panel width */
 .chart-panel > .chart-series{ order:2; }
 .chart-panel .chart-inner{ order:1; width:100%; }
-.chart-series .series-list{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
-.chart-series .series-item{ display:flex; flex-direction:row; align-items:center; gap:4px; min-width:0; color:var(--text-secondary); }
-.chart-series .series-swatch{ width:12px; height:10px; border-radius:2px; display:block; flex-shrink:0; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
-.chart-series .series-label{ font-size:0.65rem; color:var(--text-secondary); white-space:nowrap; }
-.chart-series .series-value{ font-weight:700; color:var(--text-main); font-size:0.7rem; white-space:nowrap; }
+.chart-series .series-list{ display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap; justify-content:center; }
+.chart-series .series-item{ display:flex; flex-direction:column; align-items:center; gap:2px; min-width:0; color:var(--text-secondary); }
+.chart-series .series-swatch{ width:28px; height:4px; border-radius:2px; display:block; flex-shrink:0; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+.chart-series .series-label{ font-size:0.72rem; color:var(--text-main); font-weight:600; white-space:nowrap; }
+.chart-series .series-value{ font-size:0.65rem; color:var(--text-secondary); font-weight:400; white-space:nowrap; }
 .chart-series .series-total{ background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.12)); padding:3px 8px; border-radius:6px; min-width:0; text-align:right; box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
 .chart-series .series-total .total-label{ font-size:0.6rem; color:var(--text-secondary); }
 .chart-series .series-total .total-value{ font-size:0.78rem; font-weight:800; color:var(--text-main); }
