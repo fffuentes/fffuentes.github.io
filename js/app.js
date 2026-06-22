@@ -314,7 +314,9 @@ function crearPieRotacion() {
 
                 options:{
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -383,7 +385,9 @@ function crearInventario() {
 
                     indexAxis:"y",
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -448,7 +452,9 @@ function crearAntiguedadUso() {
 
                 options:{
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -517,7 +523,9 @@ function crearAntiguedadGTQ() {
 
                     indexAxis:"y",
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -643,7 +651,9 @@ function crearPieRotacionResumen(){
 
                 options:{
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -700,7 +710,9 @@ function crearInventarioResumen(){
 
                     indexAxis:"y",
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -755,7 +767,9 @@ function crearAntiguedadUsoResumen(){
 
                 options:{
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -812,7 +826,9 @@ function crearAntiguedadGTQResumen(){
 
                     indexAxis:"y",
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -943,7 +959,9 @@ function crearPieRotacionMRP(){
 
                 options:{
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -1000,7 +1018,9 @@ function crearInventarioMRP(){
 
                     indexAxis:"y",
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -1063,7 +1083,9 @@ function crearAntiguedadUsoMRP(){
 
                 options:{
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -1132,7 +1154,9 @@ function crearAntiguedadGTQMRP(){
 
                     indexAxis:"y",
 
-                    responsive:true
+                    responsive:true,
+
+                    maintainAspectRatio:false
 
                 }
 
@@ -1564,6 +1588,8 @@ function crearParetoInventario(){
                 options:{
 
                     responsive:true,
+
+                    maintainAspectRatio:false,
 
                     plugins:{
 
