@@ -786,7 +786,7 @@ body {
     overflow: visible !important;
 }
 .chart-panel .panel-title {
-    align-self: flex-start;
+    align-self: center;
     margin-bottom: 8px;
 }
 
