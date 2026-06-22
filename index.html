@@ -134,8 +134,6 @@
 
                     <i class="fa-solid fa-rotate-right kpi-icon" style="color:#4da3ff"></i>
 
-                    <div class="kpi-body">
-
                     <span class="kpi-label">Rotación Global</span>
 
                     <span
@@ -156,8 +154,6 @@
 
                     </span>
 
-                    </div>
-
                 </div>
 
                 <!-- SKU -->
@@ -165,8 +161,6 @@
                 <div class="kpi-card">
 
                     <i class="fa-solid fa-cubes kpi-icon" style="color:#8b5cf6"></i>
-
-                    <div class="kpi-body">
 
                     <span class="kpi-label">SKU Totales</span>
 
@@ -180,8 +174,6 @@
 
                     <span class="kpi-subtitle">Códigos activos</span>
 
-                    </div>
-
                 </div>
 
                 <!-- Inventario -->
@@ -189,8 +181,6 @@
                 <div class="kpi-card">
 
                     <i class="fa-solid fa-coins kpi-icon" style="color:#84cc16"></i>
-
-                    <div class="kpi-body">
 
                     <span class="kpi-label">Inventario Total</span>
 
@@ -204,8 +194,6 @@
 
                     <span class="kpi-subtitle">Quetzales (GTQ)</span>
 
-                    </div>
-
                 </div>
 
                 <!-- Sin Rotación -->
@@ -213,8 +201,6 @@
                 <div class="kpi-card">
 
                     <i class="fa-solid fa-box-open kpi-icon" style="color:#ef4444"></i>
-
-                    <div class="kpi-body">
 
                     <span class="kpi-label">SKU Sin Rotación</span>
 
@@ -227,8 +213,6 @@
                     </span>
 
                     <span class="kpi-subtitle">Sin movimiento</span>
-
-                    </div>
 
                 </div>
 
@@ -364,8 +348,6 @@
 
                 <i class="fa-solid fa-rotate-right kpi-icon" style="color:#4da3ff"></i>
 
-                <div class="kpi-body">
-
                 <span class="kpi-label">Rotación Global</span>
 
                 <span
@@ -386,15 +368,11 @@
 
                 </span>
 
-                </div>
-
             </div>
 
             <div class="kpi-card">
 
                 <i class="fa-solid fa-cubes kpi-icon" style="color:#8b5cf6"></i>
-
-                <div class="kpi-body">
 
                 <span class="kpi-label">SKU Totales</span>
 
@@ -406,15 +384,11 @@
 
                 <span class="kpi-subtitle">Códigos MRP</span>
 
-                </div>
-
             </div>
 
             <div class="kpi-card">
 
                 <i class="fa-solid fa-cart-shopping kpi-icon" style="color:#84cc16"></i>
-
-                <div class="kpi-body">
 
                 <span class="kpi-label">Consumo Anual</span>
 
@@ -426,15 +400,11 @@
 
                 <span class="kpi-subtitle">Quetzales (GTQ)</span>
 
-                </div>
-
             </div>
 
             <div class="kpi-card">
 
                 <i class="fa-solid fa-warehouse kpi-icon" style="color:#facc15"></i>
-
-                <div class="kpi-body">
 
                 <span class="kpi-label">Inventario</span>
 
@@ -445,8 +415,6 @@
                 </span>
 
                 <span class="kpi-subtitle">Quetzales (GTQ)</span>
-
-                </div>
 
             </div>
 
@@ -528,52 +496,41 @@
 
     <div class="kpi-card">
         <i class="fa-solid fa-cubes kpi-icon" style="color:#8b5cf6"></i>
-        <div class="kpi-body">
         <span class="kpi-label">SKU Totales</span>
         <span class="kpi-value" id="kpiSkuTotal">-</span>
         <span class="kpi-subtitle">Códigos activos</span>
-        </div>
     </div>
 
     <div class="kpi-card">
         <i class="fa-solid fa-box-open kpi-icon" style="color:#ef4444"></i>
-        <div class="kpi-body">
         <span class="kpi-label">Sin Rotación</span>
         <span class="kpi-value" id="kpiSinRotacion">-</span>
         <span class="kpi-subtitle">SKU inmovilizados</span>
-        </div>
     </div>
 
     <div class="kpi-card">
         <i class="fa-solid fa-coins kpi-icon" style="color:#84cc16"></i>
-        <div class="kpi-body">
         <span class="kpi-label">Valor Sin Rotación</span>
         <span class="kpi-value" id="kpiValorSinRotacion">-</span>
         <span class="kpi-subtitle">Quetzales (GTQ)</span>
-        </div>
     </div>
 
     <div class="kpi-card">
         <i class="fa-solid fa-coins kpi-icon" style="color:#84cc16"></i>
-        <div class="kpi-body">
         <span class="kpi-label">Inventario Total</span>
         <span class="kpi-value" id="kpiInventarioTotal">-</span>
         <span class="kpi-subtitle">Quetzales (GTQ)</span>
-        </div>
     </div>
 
     <div class="kpi-card">
         <i class="fa-solid fa-gears kpi-icon" style="color:#8b5cf6"></i>
-        <div class="kpi-body">
         <span class="kpi-label">SKU MRP</span>
         <span class="kpi-value" id="kpiMRP">-</span>
         <span class="kpi-subtitle">Materiales controlados</span>
-        </div>
     </div>
 
     <div class="kpi-card">
     <i class="fa-solid fa-clock kpi-icon" style="color:#facc15"></i>
-    <div class="kpi-body">
     <span class="kpi-label">Obsolescencia</span>
 
     <span
@@ -601,32 +558,20 @@
 
 </div>
 
-<!--Panel de tarjetas -->
-<div class="panel">
-
-    <div class="panel-title">
-
-        Riesgos Detectados
-
-    </div>
-
-    <div
-        id="panelRiesgos"
-        class="riesgos-grid">
-
-    </div>
-
-</div>
-
-<!--Panel de búsqueda y top 20-->
+<!--Paneles inferiores: Riesgos+Buscar | Top 20 en 2 columnas -->
     <div class="analisis-container">
 
         <div class="panel">
 
             <div class="panel-title">
+                Riesgos Detectados
+            </div>
 
+            <div id="panelRiesgos" class="riesgos-grid">
+            </div>
+
+            <div class="panel-title" style="margin-top:12px">
                 Buscar SKU
-
             </div>
 
             <input
@@ -636,7 +581,7 @@
 
         </div>
 
-        <div class="panel">
+        <div class="panel panel-tabla">
 
             <div class="panel-title">
 
@@ -650,7 +595,7 @@
 
         </div>
 
-        <div class="panel">
+        <div class="panel panel-tabla">
 
             <div class="panel-title">
 
@@ -664,22 +609,22 @@
 
         </div>
 
+        <div class="panel panel-tabla">
+
+            <div class="panel-title">
+
+                Top 20 Obsolescencia (> 5 años)
+
+            </div>
+
+            <div
+                id="tablaObsolescencia">
+
+            </div>
+
+        </div>
+
     </div>
-
-    <div class="panel">
-
-    <div class="panel-title">
-
-        Top 20 Obsolescencia (> 5 años)
-
-    </div>
-
-    <div
-        id="tablaObsolescencia">
-
-    </div>
-
-</div>
 
 </section>
 
