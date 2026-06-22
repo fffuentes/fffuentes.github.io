@@ -19,15 +19,18 @@ let resizeTimeout = null;
 const RESIZE_DEBOUNCE = 100; // ms entre el último evento y el resize
 
 function resizeAllCharts() {
-    try {
-        Object.values(charts).forEach(chart => {
-            if (chart && typeof chart.resize === 'function') {
-                chart.resize();
-            }
-        });
-    } catch (e) {
-        // silently ignore resize errors
-    }
+    // Use rAF to ensure CSS layout has recalculated before Chart.js reads container size
+    requestAnimationFrame(function () {
+        try {
+            Object.values(charts).forEach(function (chart) {
+                if (chart && typeof chart.resize === 'function') {
+                    chart.resize();
+                }
+            });
+        } catch (e) {
+            // silently ignore resize errors
+        }
+    });
 }
 
 // "Leading + trailing" debounce:

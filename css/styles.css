@@ -768,12 +768,12 @@ body {
     margin-bottom: 8px;
 }
 
-/* Canvas container — fills available vertical space in the panel.
-   flex:1 makes the chart grow to use all room between title and series.
-   Canvas is position:absolute so it CANNOT expand its container — breaks the resize loop. */
+/* Canvas container — fills available space, shrinks correctly on zoom out.
+   flex:1 1 0% (basis 0%) ensures predictable grow AND shrink.
+   Canvas is position:absolute so it CANNOT expand its container. */
 .chart-panel .chart-inner {
     position: relative;
-    flex: 1 1 auto;
+    flex: 1 1 0%;
     min-height: 260px;
     max-height: 70vh;
     width: 100%;
