@@ -107,6 +107,9 @@ if (window.Chart) {
         : (c ? c.parentElement : null);
 
       if (!parent || !data || !Array.isArray(data.labels) || !data.labels.length) return;
+      // Only generate series for charts with few categories (≤8).
+      // Charts like Pareto with 50+ SKUs don't benefit from a compact legend.
+      if (data.labels.length > 8) return;
 
       var series = parent.querySelector('.chart-series');
       if (!series) {
