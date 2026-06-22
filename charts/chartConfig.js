@@ -14,6 +14,11 @@ if (window.Chart) {
     if (Chart.defaults.bar)      Chart.defaults.bar.aspectRatio = 1.6;
     if (Chart.defaults.line)     Chart.defaults.line.aspectRatio = 1.6;
 
+    // Doughnut charts: keep circular (don't stretch to rectangular container)
+    if (Chart.overrides && Chart.overrides.doughnut) {
+      Chart.overrides.doughnut.maintainAspectRatio = true;
+    }
+
     // Layout padding so legends/ticks are not clipped
     Chart.defaults.layout = Chart.defaults.layout || {};
     Chart.defaults.layout.padding = Object.assign(
