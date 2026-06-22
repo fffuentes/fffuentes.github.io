@@ -597,6 +597,8 @@ body {
 
     display:grid;
 
+    grid-template-columns: 1fr 1fr;
+
     gap:20px;
 
 }
@@ -648,16 +650,51 @@ body {
 
     display:grid;
 
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(220px,1fr)
-        );
+    grid-template-columns: repeat(6, minmax(0, 1fr));
 
-    gap:20px;
+    gap:12px;
 
-    margin-bottom:20px;
+    margin-bottom:12px;
 
+}
+
+/* KPI cards mas compactas en Analisis SKU */
+#analisis .kpi-card {
+    padding: 8px 10px;
+    grid-template-columns: 34px 1fr;
+    gap: 0 8px;
+    max-width: none;
+    margin-bottom: 0;
+}
+#analisis .kpi-icon {
+    font-size: 1.5rem;
+}
+#analisis .kpi-value {
+    font-size: 1.2rem;
+}
+#analisis .kpi-label {
+    font-size: 0.68rem;
+}
+#analisis .kpi-subtitle {
+    font-size: 0.6rem;
+}
+
+@media (max-width: 1200px) {
+    .kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+@media (max-width: 768px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Paneles con tablas: scroll interno para no ocupar todo el viewport */
+.panel-tabla {
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #graficoPareto{
