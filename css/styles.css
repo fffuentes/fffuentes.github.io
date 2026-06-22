@@ -675,28 +675,6 @@ body {
 
 }
 
-.pareto-resumen{
-
-    background:
-        rgba(139,92,246,.15);
-
-    border-left:
-        5px solid #8b5cf6;
-
-    padding:18px;
-
-    border-radius:10px;
-
-    margin-bottom:20px;
-
-    color:white;
-
-    font-size:18px;
-
-    line-height:1.6;
-
-}
-
 .riesgos-grid{
 
     display:grid;

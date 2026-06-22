@@ -1174,8 +1174,6 @@ function cargarAnalisisSKU(){
 
     crearParetoInventario();
 
-    calcularPareto80();
-
     cargarRiesgos();
 
     cargarTopInventario();
@@ -1662,88 +1660,6 @@ function crearParetoInventario(){
             }
 
         );
-
-}
-
-function calcularPareto80(){
-
-    const datos =
-        [...dashboardData.rotacionSKU]
-
-        .filter(
-            x => x.inventario > 0
-        )
-
-        .sort(
-            (a,b) =>
-                b.inventario - a.inventario
-        );
-
-    const total =
-        datos.reduce(
-            (a,b) =>
-                a + b.inventario,
-            0
-        );
-
-    let acumulado = 0;
-
-    let cantidadSKU = 0;
-
-    for(const item of datos){
-
-        acumulado +=
-            item.inventario;
-
-        cantidadSKU++;
-
-        if(
-            acumulado / total >= 0.80
-        ){
-
-            break;
-
-        }
-
-    }
-
-    document
-        .getElementById(
-            "resumenPareto"
-        )
-        .innerHTML = `
-
-            <strong>
-                Pareto de Inventario
-            </strong>
-
-            <br><br>
-
-            ${cantidadSKU}
-            SKU representan
-            ${(
-                acumulado / total * 100
-            ).toFixed(1)}%
-
-            del inventario total.
-
-            <br><br>
-
-            Valor acumulado:
-
-            <strong>
-
-                Q ${acumulado.toLocaleString(
-                    "es-GT",
-                    {
-                        minimumFractionDigits:2,
-                        maximumFractionDigits:2
-                    }
-                )}
-
-            </strong>
-
-        `;
 
 }
 
