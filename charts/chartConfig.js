@@ -145,14 +145,11 @@ if (window.Chart) {
       labels.forEach(function (label, i) {
         try {
           var val = values[i] || 0;
-          var color = colors[i] || 'transparent';
+          var color = colors[i] || '#FFFFFF';
 
           var item = document.createElement('div');
           item.className = 'series-item';
-
-          var sw = document.createElement('span');
-          sw.className = 'series-swatch';
-          sw.style.background = color;
+          item.style.color = color;
 
           var lab = document.createElement('span');
           lab.className = 'series-label';
@@ -167,7 +164,6 @@ if (window.Chart) {
             valEl.textContent = (val || 0).toLocaleString();
           }
 
-          item.appendChild(sw);
           item.appendChild(lab);
           item.appendChild(valEl);
           series.appendChild(item);
