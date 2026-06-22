@@ -660,24 +660,6 @@ body {
 
 }
 
-.kpi-label{
-
-    color:#d8d8d8;
-
-    font-size:14px;
-
-}
-
-.kpi-value{
-
-    color:white;
-
-    font-size:30px;
-
-    font-weight:700;
-
-}
-
 #graficoPareto{
 
     height:500px !important;
