@@ -401,7 +401,7 @@ body {
 
 .kpi-icon {
     grid-column: 1;
-    grid-row: 1 / span 10;
+    grid-row: 1;
     font-size: 2.2rem;
     align-self: center;
     justify-self: center;
