@@ -388,10 +388,16 @@ body {
 }
 
 .kpi-icon {
-    grid-row: 1 / 99;
+    grid-column: 1;
+    grid-row: 1 / span 10;
     font-size: 2.2rem;
     align-self: center;
     justify-self: center;
+}
+
+/* Force all non-icon children into the text column */
+.kpi-card > :not(.kpi-icon) {
+    grid-column: 2;
 }
 
 .kpi-subtitle {
