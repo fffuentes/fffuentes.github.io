@@ -567,6 +567,14 @@ function actualizarKPIsResumen(){
         .resumen
         .clasificacion;
 
+    // Badge dinámico según clasificación
+    var statusEl = document.getElementById("clasificacionGlobal");
+    statusEl.className = "kpi-status";
+    var c = (dashboardData.resumen.clasificacion || "").toLowerCase();
+    if (c === "alta") statusEl.classList.add("success");
+    else if (c === "media") statusEl.classList.add("warning");
+    else statusEl.classList.add("danger");
+
     document.getElementById(
         "skuTotal"
     ).innerText =
@@ -872,6 +880,14 @@ function actualizarKPIsMRP(){
         dashboardData
         .mrp
         .clasificacion;
+
+    // Badge dinámico según clasificación
+    var mrpStatusEl = document.getElementById("mrpClasificacion");
+    mrpStatusEl.className = "kpi-status";
+    var cm = (dashboardData.mrp.clasificacion || "").toLowerCase();
+    if (cm === "alta") mrpStatusEl.classList.add("success");
+    else if (cm === "media") mrpStatusEl.classList.add("warning");
+    else mrpStatusEl.classList.add("danger");
 
     document
         .getElementById(
