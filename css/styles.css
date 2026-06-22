@@ -813,7 +813,7 @@ body {
 
 
 
-/* Series layout: ultra-compact row below chart — swatch + label + value inline */
+/* Series layout: ultra-compact row below chart — width matches content, centered */
 .chart-series{
   display:flex;
   align-items:center;
@@ -824,7 +824,10 @@ body {
   border-radius:6px;
   margin-top:6px;
   margin-bottom:0;
-  width:100%;
+  margin-left:auto;
+  margin-right:auto;
+  width:fit-content;
+  max-width:95%;
   box-sizing:border-box;
   flex-shrink: 0;
 }
