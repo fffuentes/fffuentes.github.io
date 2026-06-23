@@ -697,6 +697,23 @@ body {
     overflow-x: hidden;
 }
 
+/* Responsive movil: tablas apiladas en 1 columna, texto adaptable */
+@media (max-width: 768px) {
+    .analisis-container {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-tabla {
+        max-height: 250px;
+    }
+
+    .tabla-sku td,
+    .tabla-sku th {
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+}
+
 #graficoPareto{
 
     height:500px !important;
