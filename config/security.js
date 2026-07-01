@@ -10,7 +10,7 @@ var SECURITY = {
     // Hash SHA-256 de la contraseña inicial.
     // NUNCA almacenar la contraseña en texto plano.
     // -------------------------------------------------
-    passwordHash: "6a81f10e11357a8a9e058526cf047bd6ca3ce9bbfd89b3b83b63509d809ef8f6",
+    passwordHash: "830c10cd10cd9517ae3413ae22d9b4662e7fb2c355d8e435d44685db822096ae",
 
     // -------------------------------------------------
     // Número máximo de intentos fallidos antes de bloqueo.
