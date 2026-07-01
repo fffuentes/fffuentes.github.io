@@ -116,6 +116,38 @@ body {
 
 }
 
+/* Panel de estado en el centro del header */
+.header-center {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    padding: 10px 18px;
+    max-width: 420px;
+}
+.estado-icono {
+    font-size: 1.8rem;
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+.estado-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.estado-titulo {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+.estado-desc {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.4;
+}
+
 .header-right {
 
     display:flex;
