@@ -865,6 +865,7 @@ body {
     position: relative;
     flex: 1 1 0%;
     min-height: 260px;
+    max-height: 70vh;
     width: 100%;
     box-sizing: border-box;
 }
