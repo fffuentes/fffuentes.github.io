@@ -879,6 +879,145 @@ body {
     height: 100% !important;
 }
 
+/* =====================================================
+   MODAL DE AUTENTICACIÓN
+===================================================== */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+.modal-overlay.activo {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px 24px;
+    width: 380px;
+    max-width: 90vw;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.modal-icon {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+.modal-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+.modal-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-bottom: 18px;
+    line-height: 1.5;
+}
+
+.modal-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 12px 44px 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    background: #2b2b2b;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.modal-input:focus {
+    border-color: var(--blue);
+}
+.modal-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.modal-toggle {
+    position: absolute;
+    right: 4px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 10px;
+    transition: color 0.2s;
+}
+.modal-toggle:hover {
+    color: var(--text-secondary);
+}
+
+.modal-error {
+    font-size: 0.75rem;
+    color: var(--red);
+    min-height: 20px;
+    margin-top: 6px;
+    text-align: left;
+    padding-left: 4px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.modal-btn {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s, transform 0.15s;
+}
+.modal-btn:hover {
+    transform: translateY(-1px);
+}
+
+.modal-btn-cancel {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.modal-btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.modal-btn-submit {
+    background: var(--blue);
+    color: #fff;
+}
+.modal-btn-submit:hover {
+    opacity: 0.9;
+}
+
 
 
 /* Series layout: compact below chart — text colored by category, no swatch */

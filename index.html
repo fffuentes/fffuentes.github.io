@@ -645,6 +645,69 @@
 
 </section>
 
+    <!-- ================================================= -->
+    <!-- MODAL DE AUTENTICACIÓN -->
+    <!-- ================================================= -->
+
+    <div class="modal-overlay" id="modalAuth" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+
+        <div class="modal-box">
+
+            <div class="modal-icon">&#128274;</div>
+
+            <h2 class="modal-title" id="modalTitulo">Acceso requerido</h2>
+
+            <p class="modal-desc">
+                Ingrese la contraseña para actualizar la información del Dashboard.
+            </p>
+
+            <div class="modal-field">
+
+                <input
+                    type="password"
+                    id="modalPassword"
+                    class="modal-input"
+                    placeholder="Contraseña"
+                    autocomplete="off"
+                    spellcheck="false">
+
+                <button
+                    type="button"
+                    id="modalToggle"
+                    class="modal-toggle"
+                    aria-label="Mostrar contraseña"
+                    title="Mostrar contraseña">
+
+                    <i class="fa-regular fa-eye"></i>
+
+                </button>
+
+            </div>
+
+            <p class="modal-error" id="modalError"></p>
+
+            <div class="modal-buttons">
+
+                <button type="button" class="modal-btn modal-btn-cancel" id="modalCancelar">
+
+                    Cancelar
+
+                </button>
+
+                <button type="button" class="modal-btn modal-btn-submit" id="modalActualizar">
+
+                    <i class="fa-solid fa-rotate-right"></i>
+
+                    Actualizar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <!-- JS -->
 
     <script src="config/security.js"></script>
