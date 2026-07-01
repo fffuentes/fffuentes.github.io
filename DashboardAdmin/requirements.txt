@@ -1,0 +1,2 @@
+# Dashboard Administration v1.0
+# Sin dependencias externas. Solo utiliza la librería estándar de Python.
