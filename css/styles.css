@@ -841,41 +841,6 @@ body {
     height: 100% !important;
 }
 
-/* Placeholder cuando no hay datos cargados */
-.chart-placeholder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: rgba(255,255,255,0.25);
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 20px;
-    box-sizing: border-box;
-    pointer-events: none;
-    z-index: 1;
-}
-.chart-placeholder .ph-icon {
-    font-size: 2.5rem;
-    opacity: 0.4;
-}
-.chart-placeholder .ph-text {
-    font-size: 0.8rem;
-    opacity: 0.6;
-    max-width: 260px;
-}
-/* Placeholder para el Pareto (panel sin .chart-inner) */
-.panel > .chart-placeholder {
-    position: relative;
-    height: 200px;
-}
-
 
 
 /* Series layout: compact below chart — text colored by category, no swatch */
