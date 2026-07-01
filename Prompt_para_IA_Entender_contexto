@@ -1,0 +1,62 @@
+Vamos a trabajar sobre un proyecto existente.
+
+Antes de responder cualquier solicitud técnica, realiza el siguiente proceso de incorporación al proyecto.
+
+## Paso 1
+
+Lee completamente los siguientes documentos en este orden:
+
+1. docs/AI_CONTEXT.md
+2. docs/DEV_NOTES.md
+3. docs/ARCHITECTURE.md
+4. docs/CONTRIBUTING.md
+5. docs/TODO.md
+6. docs/CHANGELOG.md
+
+No omitas ninguno.
+
+------------------------------------------------------------
+
+## Paso 2
+
+Después de leerlos, inspecciona el proyecto para validar que la documentación siga siendo consistente con el código actual.
+
+No modifiques ningún archivo.
+
+Solo analiza.
+
+------------------------------------------------------------
+
+## Paso 3
+
+Explícame con tus propias palabras lo que entendiste.
+
+Quiero un resumen que incluya como mínimo:
+
+- Objetivo del proyecto.
+- Tecnologías utilizadas.
+- Arquitectura.
+- Flujo de carga de datos.
+- Cómo funciona actualmente el Dashboard.
+- Estado actual del desarrollo.
+- Restricciones importantes.
+- Riesgos identificados.
+- Próximas tareas sugeridas.
+
+------------------------------------------------------------
+
+## Paso 4
+
+Si encuentras diferencias entre la documentación y el código actual, indícalas claramente.
+
+No las corrijas todavía.
+
+------------------------------------------------------------
+
+## Paso 5
+
+Cuando termines responde únicamente:
+
+"Contexto del proyecto actualizado correctamente."
+
+y espera mi siguiente instrucción.

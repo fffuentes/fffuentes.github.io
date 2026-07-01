@@ -126,6 +126,10 @@ body {
     border-radius: 12px;
     padding: 10px 18px;
     max-width: 420px;
+    transition: opacity 0.3s ease;
+}
+.header-center.oculto {
+    display: none;
 }
 .estado-icono {
     font-size: 1.8rem;

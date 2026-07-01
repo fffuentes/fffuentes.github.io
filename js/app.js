@@ -169,6 +169,54 @@ function actualizarFecha() {
 
 
 // =====================================================
+// PANEL DE ESTADO
+// =====================================================
+
+function actualizarPanelEstado(estado) {
+
+    const panel = document.getElementById("panelEstado");
+    const icono = document.getElementById("estadoIcono");
+    const titulo = document.getElementById("estadoTitulo");
+    const desc = document.getElementById("estadoDesc");
+
+    if (!panel || !icono || !titulo || !desc) return;
+
+    switch (estado) {
+
+        case "cargando":
+            panel.classList.remove("oculto");
+            panel.style.display = "";
+            icono.innerHTML = "&#9203;"; // ⏳
+            titulo.innerText = "Actualizando información...";
+            desc.innerText = "Leyendo archivo Excel...";
+            break;
+
+        case "exito":
+            panel.classList.add("oculto");
+            break;
+
+        case "error":
+            panel.classList.remove("oculto");
+            panel.style.display = "";
+            icono.innerHTML = "&#9888;"; // ⚠
+            titulo.innerText = "No se pudo cargar la información";
+            desc.innerText = "Verifique la conexión o que el archivo Excel esté disponible.";
+            break;
+
+        default:
+            // Restaurar estado inicial
+            panel.classList.remove("oculto");
+            panel.style.display = "";
+            icono.innerHTML = "&#128202;"; // 📊
+            titulo.innerText = "Dashboard preparado";
+            desc.innerHTML = "No existen datos cargados en esta sesión.<br>Presione \"Actualizar\" para consultar la información.";
+
+    }
+
+}
+
+
+// =====================================================
 // BOTÓN ACTUALIZAR
 // =====================================================
 
@@ -184,9 +232,16 @@ document
                 "Actualizando dashboard..."
             );
 
+            actualizarPanelEstado("cargando");
+
             actualizarFecha();
 
-            await refrescarDashboard();
+            try {
+                await refrescarDashboard();
+                actualizarPanelEstado("exito");
+            } catch (e) {
+                actualizarPanelEstado("error");
+            }
 
         }
     );

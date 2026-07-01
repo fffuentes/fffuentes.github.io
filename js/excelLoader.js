@@ -54,9 +54,7 @@ async function cargarExcel() {
 
         console.error(error);
 
-        alert(
-            "Error cargando Excel"
-        );
+        throw error;
 
     }
 
