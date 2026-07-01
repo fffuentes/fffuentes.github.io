@@ -11,6 +11,7 @@ var Auth = (function () {
     // Estado interno (no accesible desde fuera)
     // -------------------------------------------------
     var _intentos = 0;
+    var _bloqueadoHasta = null;
 
     // -------------------------------------------------
     // sha256(texto)
@@ -74,11 +75,37 @@ var Auth = (function () {
         _intentos = 0;
     }
 
+    // -------------------------------------------------
+    // _bloquearHasta(minutos)
+    // Bloquea la autenticación por N minutos.
+    // -------------------------------------------------
+    function _bloquearHasta(minutos) {
+        _bloqueadoHasta = Date.now() + (minutos * 60 * 1000);
+
+        // Desbloquear automáticamente al cumplirse el tiempo
+        setTimeout(function () {
+            _bloqueadoHasta = null;
+            _intentos = 0;
+            var input = document.getElementById("modalPassword");
+            var btnSubmit = document.getElementById("modalActualizar");
+            var error = document.getElementById("modalError");
+            if (input) input.disabled = false;
+            if (btnSubmit) btnSubmit.disabled = false;
+            if (error) error.textContent = "";
+        }, minutos * 60 * 1000);
+    }
+
     // =====================================================
     // MODAL — Componente visual (sin lógica de autenticación)
     // =====================================================
 
     var _modalVisible = false;
+    var _onAutenticadoCallback = null;
+
+    // Registra el callback que se ejecutará tras autenticación exitosa
+    function onAutenticado(callback) {
+        _onAutenticadoCallback = callback;
+    }
 
     function mostrarModal() {
         var overlay = document.getElementById("modalAuth");
@@ -86,8 +113,14 @@ var Auth = (function () {
         var error = document.getElementById("modalError");
         var toggleBtn = document.getElementById("modalToggle");
         var toggleIcon = toggleBtn ? toggleBtn.querySelector("i") : null;
+        var btnSubmit = document.getElementById("modalActualizar");
 
         if (!overlay || !input) return;
+
+        // Si hay bloqueo activo, no permitir abrir
+        if (_bloqueadoHasta && Date.now() < _bloqueadoHasta) {
+            return;
+        }
 
         overlay.classList.add("activo");
         _modalVisible = true;
@@ -95,10 +128,12 @@ var Auth = (function () {
         // Limpiar estado previo
         input.value = "";
         input.type = "password";
+        input.disabled = false;
         if (error) error.textContent = "";
         if (toggleIcon) {
             toggleIcon.className = "fa-regular fa-eye";
         }
+        if (btnSubmit) btnSubmit.disabled = false;
 
         // Foco automático
         setTimeout(function () {
@@ -173,11 +208,52 @@ var Auth = (function () {
             });
         }
 
-        // Botón Actualizar — placeholder: aquí se conectará la autenticación
+        // Botón Actualizar — autenticación real
         if (btnActualizar) {
             btnActualizar.addEventListener("click", function () {
-                // TODO: conectar Auth.validar() en fase posterior
-                console.log("Modal: botón Actualizar presionado (autenticación no conectada aún)");
+                var password = input ? input.value : "";
+
+                validar(password).then(function (resultado) {
+                    if (resultado) {
+                        // Contraseña correcta
+                        reiniciarIntentos();
+                        cerrarModal();
+                        if (_onAutenticadoCallback) {
+                            _onAutenticadoCallback();
+                        }
+                    } else {
+                        // Contraseña incorrecta
+                        if (error) {
+                            error.textContent = "Contrase\u00f1a incorrecta.";
+                        }
+                        if (input) {
+                            input.value = "";
+                            input.focus();
+                        }
+
+                        // Verificar bloqueo
+                        var restantes = intentosRestantes();
+                        if (restantes === 0 && SECURITY._lockoutDuration !== null) {
+                            var minutos = SECURITY._lockoutDuration;
+                            _bloquearHasta(minutos);
+                            if (error) {
+                                error.textContent = "Demasiados intentos. Intente de nuevo en " + minutos + " minuto(s).";
+                            }
+                            if (input) input.disabled = true;
+                            if (btnActualizar) btnActualizar.disabled = true;
+                        } else if (restantes === 0) {
+                            if (error) {
+                                error.textContent = "Demasiados intentos fallidos. Recargue la p\u00e1gina para reintentar.";
+                            }
+                            if (input) input.disabled = true;
+                            if (btnActualizar) btnActualizar.disabled = true;
+                        } else if (restantes <= 2 && restantes !== Infinity) {
+                            if (error) {
+                                error.textContent = "Contrase\u00f1a incorrecta. " + restantes + " intento(s) restante(s).";
+                            }
+                        }
+                    }
+                });
             });
         }
     }
@@ -198,7 +274,8 @@ var Auth = (function () {
         intentosRestantes: intentosRestantes,
         reiniciarIntentos: reiniciarIntentos,
         mostrarModal: mostrarModal,
-        cerrarModal: cerrarModal
+        cerrarModal: cerrarModal,
+        onAutenticado: onAutenticado
     };
 
 })();

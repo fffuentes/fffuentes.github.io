@@ -74,6 +74,18 @@ document.addEventListener(
 
         actualizarFecha();
 
+        // Conectar autenticación: al validar correctamente, ejecutar la carga
+        Auth.onAutenticado(function () {
+            actualizarPanelEstado("cargando");
+            actualizarFecha();
+
+            refrescarDashboard().then(function () {
+                actualizarPanelEstado("exito");
+            }).catch(function () {
+                actualizarPanelEstado("error");
+            });
+        });
+
     }
 );
 
@@ -239,22 +251,13 @@ document
     )
     .addEventListener(
         "click",
-        async () => {
+        function () {
 
             console.log(
                 "Actualizando dashboard..."
             );
 
-            actualizarPanelEstado("cargando");
-
-            actualizarFecha();
-
-            try {
-                await refrescarDashboard();
-                actualizarPanelEstado("exito");
-            } catch (e) {
-                actualizarPanelEstado("error");
-            }
+            Auth.mostrarModal();
 
         }
     );
