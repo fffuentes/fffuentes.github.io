@@ -172,7 +172,15 @@ function actualizarFecha() {
 // PANEL DE ESTADO
 // =====================================================
 
+let panelTimeout = null;
+
 function actualizarPanelEstado(estado) {
+
+    // Cancelar cualquier temporizador pendiente antes de evaluar el nuevo estado
+    if (panelTimeout !== null) {
+        clearTimeout(panelTimeout);
+        panelTimeout = null;
+    }
 
     const panel = document.getElementById("panelEstado");
     const icono = document.getElementById("estadoIcono");
@@ -185,31 +193,36 @@ function actualizarPanelEstado(estado) {
 
         case "cargando":
             panel.classList.remove("oculto");
-            panel.style.display = "";
             icono.innerHTML = "&#9203;"; // ⏳
-            titulo.innerText = "Actualizando información...";
+            titulo.innerText = "Actualizando informaci\u00f3n...";
             desc.innerText = "Leyendo archivo Excel...";
             break;
 
         case "exito":
-            panel.classList.add("oculto");
+            panel.classList.remove("oculto");
+            icono.innerHTML = "&#9989;"; // ✅
+            titulo.innerText = "Informaci\u00f3n actualizada correctamente.";
+            desc.innerText = "";
+            // Ocultar autom\u00e1ticamente despu\u00e9s de 2 segundos
+            panelTimeout = setTimeout(function () {
+                panel.classList.add("oculto");
+                panelTimeout = null;
+            }, 2000);
             break;
 
         case "error":
             panel.classList.remove("oculto");
-            panel.style.display = "";
             icono.innerHTML = "&#9888;"; // ⚠
-            titulo.innerText = "No se pudo cargar la información";
-            desc.innerText = "Verifique la conexión o que el archivo Excel esté disponible.";
+            titulo.innerText = "No se pudo cargar la informaci\u00f3n";
+            desc.innerText = "Verifique la conexi\u00f3n o que el archivo Excel est\u00e9 disponible.";
             break;
 
         default:
             // Restaurar estado inicial
             panel.classList.remove("oculto");
-            panel.style.display = "";
             icono.innerHTML = "&#128202;"; // 📊
             titulo.innerText = "Dashboard preparado";
-            desc.innerHTML = "No existen datos cargados en esta sesión.<br>Presione \"Actualizar\" para consultar la información.";
+            desc.innerHTML = "No existen datos cargados en esta sesi\u00f3n.<br>Presione \"Actualizar\" para consultar la informaci\u00f3n.";
 
     }
 
