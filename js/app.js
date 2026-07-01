@@ -74,8 +74,49 @@ document.addEventListener(
 
         actualizarFecha();
 
+        crearPlaceholders();
+
     }
 );
+
+
+// =====================================================
+// PLACEHOLDERS — mensaje "esperando datos" sobre canvas
+// =====================================================
+
+function crearPlaceholders() {
+    var phHTML = '<div class="ph-icon">&#128202;</div>' +
+        '<div class="ph-text">Los datos a&uacute;n no han sido cargados.</div>' +
+        '<div class="ph-text">Presione &quot;Actualizar&quot; para consultar la informaci&oacute;n.</div>';
+
+    // Placeholders en paneles de graficas (dentro de .chart-inner)
+    document.querySelectorAll('.chart-panel .chart-inner').forEach(function(inner) {
+        if (!inner.querySelector('.chart-placeholder')) {
+            var ph = document.createElement('div');
+            ph.className = 'chart-placeholder';
+            ph.innerHTML = phHTML;
+            inner.appendChild(ph);
+        }
+    });
+
+    // Placeholder para el Pareto (panel sin .chart-inner)
+    var paretoPanel = document.querySelector('#graficoPareto');
+    if (paretoPanel && paretoPanel.closest) {
+        var panel = paretoPanel.closest('.panel');
+        if (panel && !panel.querySelector('.chart-placeholder')) {
+            var ph = document.createElement('div');
+            ph.className = 'chart-placeholder';
+            ph.innerHTML = phHTML;
+            panel.appendChild(ph);
+        }
+    }
+}
+
+function ocultarPlaceholders() {
+    document.querySelectorAll('.chart-placeholder').forEach(function(el) {
+        el.style.display = 'none';
+    });
+}
 
 
 // =====================================================
@@ -204,6 +245,8 @@ async function inicializarDashboard(){
 
     await cargarExcel();
 
+    ocultarPlaceholders();
+
     crearGraficosResumen();
 
     crearGraficosMRP();
@@ -220,6 +263,8 @@ async function inicializarDashboard(){
 async function refrescarDashboard(){
 
     await cargarExcel();
+
+    ocultarPlaceholders();
 
     Object.values(charts)
         .forEach(chart => {
